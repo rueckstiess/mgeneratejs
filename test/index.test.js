@@ -61,8 +61,8 @@ describe('mgenerate.js', function() {
         }
       });
       assert.equal(res.person.emails.length, 5);
-      assert.ok(_.all(res.person.emails, function(email) {
-        return _.isString(email) && _.contains(email, '@');
+      assert.ok(_.every(res.person.emails, function(email) {
+        return _.isString(email) && _.includes(email, '@');
       }));
     });
 
