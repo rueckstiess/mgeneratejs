@@ -51,6 +51,22 @@ describe('mgenerate.js', function() {
     });
   });
 
+  describe('Choose', function() {
+    it('should chose from the given choices without weights', function() {
+      var res = mgenerate({foo: {$choose: {from: ['a', 'b', 'c']}}});
+      assert.equal(typeof res.foo, 'string');
+      assert.ok(_.includes(['a', 'b', 'c'], res.foo));
+    });
+    it('should chose from the given choices with weights', function() {
+      var res = mgenerate({foo: {$choose: {
+        from: ['a', 'b', 'c'],
+        weights: [1, 0, 0]
+      }}});
+      assert.equal(typeof res.foo, 'string');
+      assert.equal(res.foo, 'a');
+    });
+  });
+
   describe('Arrays', function() {
     it('should create a fixed-length array', function() {
       var res = mgenerate({

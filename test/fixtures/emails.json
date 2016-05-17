@@ -1,0 +1,9 @@
+{
+  "name": "$name",
+  "emails": {
+    "$array": {
+      "of": "$email",
+      "number": 5
+    }
+  }
+}

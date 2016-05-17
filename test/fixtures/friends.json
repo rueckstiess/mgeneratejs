@@ -1,0 +1,17 @@
+{
+  "name": "$name",
+  "friends": {
+    "$array": {
+      "of": {
+        "name": "$name",
+        "phone": "$phone"
+      },
+      "number": {
+        "$integer": {
+          "min": 2,
+          "max": 5
+        }
+      }
+    }
+  }
+}

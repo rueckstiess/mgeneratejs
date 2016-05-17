@@ -8,12 +8,16 @@
     "test": "mocha",
     "ci": "npm run check && npm test"
   },
+  "bin": {
+    "mgenerate": "./bin/mgenerate.js"
+  },
   "homepage": "http://github.com/mongodb-js/mgenerate-js",
   "repository": {
     "type": "git",
     "url": "git://github.com/mongodb-js/mgenerate-js.git"
   },
   "dependencies": {
+    "event-stream": "^3.3.2",
     "lodash": "^4.12.0",
     "yargs": "^4.7.0"
   },
