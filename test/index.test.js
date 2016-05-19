@@ -1,8 +1,9 @@
 var mgenerate = require('../');
+var operators = require('../lib/operators');
 var assert = require('assert');
 var _ = require('lodash');
 
-var debug = require('debug')('mgenerate:test');
+// var debug = require('debug')('mgenerate:test');
 
 describe('mgenerate.js', function() {
   it('should throw an error if additional key is present after operator', function() {
@@ -14,7 +15,6 @@ describe('mgenerate.js', function() {
 
   it('should work with arrays', function() {
     var res = mgenerate({foo: [{$string: {length: 3}}, 'foo', '$integer']});
-    debug('res', res);
     assert.equal(typeof res.foo[0], 'string');
     assert.equal(res.foo[0].length, 3);
     assert.equal(res.foo[1], 'foo');
@@ -22,7 +22,6 @@ describe('mgenerate.js', function() {
   });
   it('should work with nested objects', function() {
     var res = mgenerate({foo: {bar: '$age'}});
-    debug('res', res);
     assert.equal(typeof res.foo, 'object');
     assert.equal(typeof res.foo.bar, 'number');
   });
@@ -34,7 +33,44 @@ describe('mgenerate.js', function() {
     assert.equal(res.foo.length, 4);
   });
 
-  describe('Missing values', function() {
+  describe('$inc', function() {
+    beforeEach(function() {
+      // reset the inc operator to start from scratch
+      operators.inc.reset();
+    });
+    it('should work with default parameters', function() {
+      var template = {id: '$inc'};
+      var res = _.map(_.range(5), function() {
+        return mgenerate(template);
+      });
+      assert.deepEqual(_.map(res, 'id'), [0, 1, 2, 3, 4]);
+    });
+    it('should work with non-default start parameter', function() {
+      var template = {id: {$inc: {start: 42}}};
+      var res = _.map(_.range(5), function() {
+        return mgenerate(template);
+      });
+      assert.deepEqual(_.map(res, 'id'), [42, 43, 44, 45, 46]);
+    });
+    it('should work with non-default step parameter', function() {
+      var template = {id: {$inc: {start: 13, step: 2}}};
+      var res = _.map(_.range(3), function() {
+        return mgenerate(template);
+      });
+      assert.deepEqual(_.map(res, 'id'), [13, 15, 17]);
+    });
+    it('should work with step parameter expression', function() {
+      var template = {id: {$inc: {start: 13, step: {$number: {min: 1, max: 2}}}}};
+      var res = _.map(_.range(3), function() {
+        return mgenerate(template);
+      });
+      assert.ok(_.every(_.map(res, 'id'), function(id) {
+        return id >= 13 && id <= 17;
+      }));
+    });
+  });
+
+  describe('$missing', function() {
     it('should discard a $missing value', function() {
       var res = mgenerate({
         a: '$integer',
@@ -51,13 +87,13 @@ describe('mgenerate.js', function() {
     });
   });
 
-  describe('Choose', function() {
+  describe('$choose', function() {
     it('should chose from the given choices without weights', function() {
       var res = mgenerate({foo: {$choose: {from: ['a', 'b', 'c']}}});
       assert.equal(typeof res.foo, 'string');
       assert.ok(_.includes(['a', 'b', 'c'], res.foo));
     });
-    it('should chose from the given choices with weights', function() {
+    it('should choose from the given choices with weights', function() {
       var res = mgenerate({foo: {$choose: {
         from: ['a', 'b', 'c'],
         weights: [1, 0, 0]
@@ -67,7 +103,25 @@ describe('mgenerate.js', function() {
     });
   });
 
-  describe('Arrays', function() {
+  describe('$pick', function() {
+    it('should pick the correct element from an array', function() {
+      var res = mgenerate({color: {$pick: {array: ['green', 'red', 'blue'], element: 1}}});
+      assert.equal(res.color, 'red');
+    });
+    it('should return $missing if element is out of array bounds', function() {
+      var res = mgenerate({color: {$pick: {array: ['green', 'red', 'blue'], element: 3}}});
+      assert.ok(!_.has(res, 'color'));
+      res = mgenerate({color: {$pick: {array: ['green', 'red', 'blue'], element: -1}}});
+      assert.ok(!_.has(res, 'color'));
+    });
+    it('should return $missing if `array` is not an array', function() {
+      var res = mgenerate({color: {$pick: {array: 'red', element: 3}}});
+      assert.ok(!_.has(res, 'color'));
+    });
+  });
+
+
+  describe('$array', function() {
     it('should create a fixed-length array', function() {
       var res = mgenerate({
         person: {
@@ -97,7 +151,7 @@ describe('mgenerate.js', function() {
     });
   });
 
-  describe('Strings', function() {
+  describe('$string', function() {
     it('should work for string format operator', function() {
       var res = mgenerate({foo: '$string'});
       assert.equal(typeof res.foo, 'string');
@@ -112,7 +166,7 @@ describe('mgenerate.js', function() {
     });
   });
 
-  describe('Numbers', function() {
+  describe('$integer / $number', function() {
     it('should work for string format operator', function() {
       var res = mgenerate({foo: '$integer'});
       assert.equal(typeof res.foo, 'number');
