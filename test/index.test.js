@@ -189,6 +189,49 @@ describe('mgenerate.js', function() {
     });
   });
 
+  describe('$point', function() {
+    it('should create a GeoJSON point', function() {
+      var res = mgenerate({loc: '$point'});
+      assert.ok(_.isObject(res.loc));
+      assert.ok(_.has(res.loc, 'type'));
+      assert.equal(res.loc.type, 'Point');
+      assert.ok(_.has(res.loc, 'coordinates'));
+      assert.ok(_.isArray(res.loc.coordinates));
+      assert.equal(res.loc.coordinates.length, 2);
+    });
+  });
+
+  describe('$polygon', function() {
+    it('should create a GeoJSON polygon with default number of corners', function() {
+      var res = mgenerate({polygon: '$polygon'});
+      assert.ok(_.isObject(res.polygon));
+      assert.ok(_.has(res.polygon, 'type'));
+      assert.equal(res.polygon.type, 'Polygon');
+      assert.ok(_.has(res.polygon, 'coordinates'));
+      assert.ok(_.isArray(res.polygon.coordinates));
+      assert.ok(_.isArray(res.polygon.coordinates[0]));
+      assert.ok(_.isArray(res.polygon.coordinates[0][0]));
+      assert.equal(res.polygon.coordinates[0].length, 4);
+      assert.equal(res.polygon.coordinates[0][0].length, 2);
+      assert.deepEqual(res.polygon.coordinates[0][0],
+        res.polygon.coordinates[0][res.polygon.coordinates[0].length - 1]);
+    });
+    it('should create a GeoJSON polygon with custom number of corners', function() {
+      var res = mgenerate({polygon: {'$polygon': {corners: 5}}});
+      assert.ok(_.isObject(res.polygon));
+      assert.ok(_.has(res.polygon, 'type'));
+      assert.equal(res.polygon.type, 'Polygon');
+      assert.ok(_.has(res.polygon, 'coordinates'));
+      assert.ok(_.isArray(res.polygon.coordinates));
+      assert.ok(_.isArray(res.polygon.coordinates[0]));
+      assert.ok(_.isArray(res.polygon.coordinates[0][0]));
+      assert.equal(res.polygon.coordinates[0].length, 6);
+      assert.equal(res.polygon.coordinates[0][0].length, 2);
+      assert.deepEqual(res.polygon.coordinates[0][0],
+        res.polygon.coordinates[0][res.polygon.coordinates[0].length - 1]);
+    });
+  });
+
   describe('$string', function() {
     it('should work for string format operator', function() {
       var res = mgenerate({foo: '$string'});
