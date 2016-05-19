@@ -232,6 +232,14 @@ describe('mgenerate.js', function() {
     });
   });
 
+  describe('$objectid', function() {
+    it('not implemented yet');
+  });
+
+  describe('$regex', function() {
+    it('not implemented yet');
+  });
+
   describe('$string', function() {
     it('should work for string format operator', function() {
       var res = mgenerate({foo: '$string'});
