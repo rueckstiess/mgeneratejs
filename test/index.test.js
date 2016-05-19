@@ -20,6 +20,7 @@ describe('mgenerate.js', function() {
     assert.equal(res.foo[1], 'foo');
     assert.equal(typeof res.foo[2], 'number');
   });
+
   it('should work with nested objects', function() {
     var res = mgenerate({foo: {bar: '$age'}});
     assert.equal(typeof res.foo, 'object');
@@ -237,6 +238,26 @@ describe('mgenerate.js', function() {
   });
 
   describe('$regex', function() {
+    it('not implemented yet');
+  });
+
+  describe('$timestamp', function() {
+    it('not implemented yet');
+  });
+
+  describe('$linestring', function() {
+    it('not implemented yet');
+  });
+
+  describe('$geometries', function() {
+    it('not implemented yet');
+  });
+
+  describe('$minkey', function() {
+    it('not implemented yet');
+  });
+
+  describe('$maxkey', function() {
     it('not implemented yet');
   });
 

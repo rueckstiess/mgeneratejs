@@ -1,0 +1,24 @@
+{
+  "_id": "$oid",
+  "name": "$name",
+  "age": {"$choose": {"from": ["$age", "$missing"], "weights": [63, 37] } },
+  "email": "$email",
+  "address": {
+    "street": {"$address": {"short_suffix": true} },
+    "postal_code": {"$choose": {"from": ["$zip", {"$zip": {"plusfour": true}}, {"$number": {"min": 10000, "max": 99999} } ], "weights": [10, 3, 1] } },
+    "city": "$city",
+    "country": {"$choose": {"from": ["USA", "UK", "France", "Australia", "Germany", {"$country": {"full": true}}], "weights": [20, 3, 2, 1, 1, 1] } }
+  },
+  "gender": {"$choose": {"from": ["female", "male", "$missing"], "weights": [4, 3, 1] } },
+  "phone_no": "$phone",
+  "membership_status": {"$choose": {"from": ["ACTIVE", "INACTIVE", "PENDING"], "weights": [65, 8, 27] } },
+  "favorite_feature": {
+    "$choose": {
+      "from": ["Wired Tiger", "Sharding", "Replication", "Auth", "Partial Indexes", "Document Validation", "Aggregation", "Text Search", "$missing"],
+      "weights": [4, 6, 3, 2, 8, 18, 7, 3, 11]
+    }
+  },
+  "initial_position": "$point",
+  "last_position": "$point",
+  "last_login": "$date"
+}
