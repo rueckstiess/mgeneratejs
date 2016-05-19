@@ -151,6 +151,44 @@ describe('mgenerate.js', function() {
     });
   });
 
+  describe('$join', function() {
+    it('should join elements without explicit separator', function() {
+      var res = mgenerate({code: {$join: {array: ['foo', 'bar', 'baz']}}});
+      assert.equal(res.code, 'foobarbaz');
+    });
+    it('should join elements with explicit separator', function() {
+      var res = mgenerate({code: {$join: {array: ['foo', 'bar', 'baz'], sep: '-'}}});
+      assert.equal(res.code, 'foo-bar-baz');
+    });
+    it('should join elements with multi-character separator', function() {
+      var res = mgenerate({code: {$join: {array: ['foo', 'bar', 'baz'], sep: ' ==> '}}});
+      assert.equal(res.code, 'foo ==> bar ==> baz');
+    });
+    it('should join elements with multi-character separator', function() {
+      var res = mgenerate({code: {$join: {array: 'foo', sep: ','}}});
+      assert.ok(!_.has(res, 'code'));
+    });
+  });
+
+  describe('$coordinates', function() {
+    it('should work with default bounds', function() {
+      var res = mgenerate({loc: '$coordinates'});
+      assert.ok(_.isArray(res.loc));
+      assert.ok(res.loc[0] >= -180);
+      assert.ok(res.loc[0] <= 180);
+      assert.ok(res.loc[1] >= -90);
+      assert.ok(res.loc[1] <= 90);
+    });
+    it('should work for with custom bounds', function() {
+      var res = mgenerate({loc: {'$coordinates': {long_lim: [-2, 2], lat_lim: [-5, 5]}}});
+      assert.ok(_.isArray(res.loc));
+      assert.ok(res.loc[0] >= -2);
+      assert.ok(res.loc[0] <= 2);
+      assert.ok(res.loc[1] >= -5);
+      assert.ok(res.loc[1] <= 5);
+    });
+  });
+
   describe('$string', function() {
     it('should work for string format operator', function() {
       var res = mgenerate({foo: '$string'});
