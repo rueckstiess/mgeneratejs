@@ -1,6 +1,6 @@
 {
-  "name": "mgenerate-js",
-  "description": "A data generator.",
+  "name": "mgeneratejs",
+  "description": "Generate rich random data based on a JSON template file.",
   "version": "0.1.0",
   "scripts": {
     "fmt": "mongodb-js-fmt",
@@ -11,10 +11,10 @@
   "bin": {
     "mgeneratejs": "./bin/mgenerate.js"
   },
-  "homepage": "http://github.com/mongodb-js/mgenerate-js",
+  "homepage": "http://github.com/rueckstiess/mgeneratejs",
   "repository": {
     "type": "git",
-    "url": "git://github.com/mongodb-js/mgenerate-js.git"
+    "url": "git://github.com/rueckstiess/mgeneratejs.git"
   },
   "dependencies": {
     "bson": "^0.4.23",
