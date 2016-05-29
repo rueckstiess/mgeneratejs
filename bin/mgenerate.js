@@ -44,7 +44,7 @@ if (process.stdin.isTTY) {
   yargs.usage('Usage: $0 <options> [template]')
     .demand(1, 'must provide a template file or string');
 } else {
-  yargs.usage('Usage: [template] > $0 <options>');
+  yargs.usage('Usage: $0 <options> < [template]');
 }
 
 var argv = yargs.argv;
