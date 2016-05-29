@@ -101,21 +101,30 @@ mgeneratejs '{"ip_addresses": {"$array": {"of": "$ip", "number": {"$integer": {"
 
 ### General Operators
 
-### `$inc`
+- [`$array`](#array): Creates an array of values.
+- [`$choose`](#choose): Chooses one element from an array of possible choices.
+- [`$inc`](#inc): Generates natural numbers in increasing order.
+- [`$join`](#join): Joins elements of an array to a string.
+- [`$pick`](#pick): Returns an element from an array.
 
-Generate natural numbers in increasing order.
+### Geospatial Operators
 
-_Options_
-- `start` (optional) starts counting at this value. Default `0`.
-- `step` (optional) increases by this amount each time. Default `1`. Can also take negative value.
+- [`$coordinates`](#coordinates): Returns a pair of longitude/latitude coordinates.
+- [`$point`](#point): Returns a GeoJSON Point.
+- [`$linestring`](#linestring): Returns a GeoJSON LineString.
+- [`$polygon`](#polygon): Returns a GeoJSON Polygon.
+- [`$geometries`](#geometries): Returns a GeoJSON GeometryCollection.
 
-> **Example**
->
-> ```
-> {"even_numbers": {"$inc": {"start": 0, "step": 2}}}
-> ```
->
-> Assigns the numbers 0, 2, 4, 6, ... to subsequent objects.
+### Native and MongoDB-specific Types
+
+- [`$binary`](#binary): Returns a MongoDB Binary type.
+- [`$date`](#date): Returns a random date, optionally in a given range.
+- [`$maxkey`](#maxkey): Returns a MongoDB MaxKey object.
+- [`$minkey`](#minkey): Returns a MongoDB MinKey object.
+- [`$objectid`](#objectid): Returns MongoDB ObjectID.
+- [`$regex`](#regex): Returns a Regular Expression object.
+- [`$timestamp`](#timestamp): Returns a MongoDB Timestamp.
+
 
 ### `$array`
 
@@ -151,6 +160,45 @@ _Options_
 >
 > Returns `{"status": "read"}` with probability 1/2, and `{"status": "unread"}` and
 > `{"status": "deleted"}` each with probability 1/4.
+
+### `$date`
+
+Returns a random date object, optionally between specified `min` and `max` values.
+If `min` and/or `max` are provided, they need to be in a format that [Date.parse()][date-parse]
+can read, e.g. ISO-8601.
+
+_Aliases_
+- `$datetime`
+
+_Options_
+- `min` (optional) Minimum date, as parseable string.
+- `max` (optional) Maximum date, as parsable string.
+
+> **Example**
+>
+> ```
+> {"last_login": {"$date": {"min": "2015-01-01", "max": "2016-12-31T23:59:59.999Z"}}}
+> ```
+>
+> Returns a random date and time between 2015 and 2016 (incl.), e.g.
+> `{"last_login":{"$date":"2016-06-28T15:28:54.721Z"}}`.
+
+
+### `$inc`
+
+Generate natural numbers in increasing order.
+
+_Options_
+- `start` (optional) starts counting at this value. Default `0`.
+- `step` (optional) increases by this amount each time. Default `1`. Can also take negative value.
+
+> **Example**
+>
+> ```
+> {"even_numbers": {"$inc": {"start": 0, "step": 2}}}
+> ```
+>
+> Assigns the numbers 0, 2, 4, 6, ... to subsequent objects.
 
 
 
@@ -191,31 +239,6 @@ _Options_
 > ```
 >
 > Returns `{"code": "foo-bar-baz"}`.
-
-
-### `$date`
-
-Returns a random date object, optionally between specified `min` and `max` values.
-If `min` and/or `max` are provided, they need to be in a format that [Date.parse()][date-parse]
-can read, e.g. ISO-8601.
-
-_Aliases_
-- `$datetime`
-
-_Options_
-- `min` (optional) Minimum date, as parseable string.
-- `max` (optional) Maximum date, as parsable string.
-
-> **Example**
->
-> ```
-> {"last_login": {"$date": {"min": "2015-01-01", "max": "2016-12-31T23:59:59.999Z"}}}
-> ```
->
-> Returns a random date and time between 2015 and 2016 (incl.), e.g.
-> `{"last_login":{"$date":"2016-06-28T15:28:54.721Z"}}`.
-
-### Geospatial Operators
 
 
 ### `$coordinates`
@@ -363,11 +386,9 @@ _Options_
 
 
 
+## Chance.js
 
-
-#### MongoDB Native Types
-
-### Chance.js
+## Advanced Templates
 
 ## License
 
