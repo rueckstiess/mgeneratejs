@@ -510,10 +510,42 @@ Some Examples:
 
 TBD.
 
+In short, you can use handlebar template strings to build even more complex
+values, e.g.
+
+```
+mgeneratejs '{"recipient": "{{chance.name()}} <{{chance.email()}}>"}' -n 3
+```
+```
+{"recipient":"Lora Jimenez <muwer@oma.qa>"}
+{"recipient":"Elnora Brewer <wisnowaz@vacpar.tg>"}
+{"recipient":"Howard Bryan <jo@vemoriw.sd>"}
+```
+
+## Difference to mtools' mgenerate script
+
+This is a Javascript port from the [mgenerate][mgenerate-mtools] script in the
+[mtools][mtools] library (of which I am also the author). It is mostly backwards
+compatible except for the following breaking changes:  
+
+1. The "array" operator format is no longer supported, as it was confusing
+which arguments need to be provided in which order. Instead, use the "object"
+format with named options. See [array shortcut syntax][array-syntax].
+2. The "$concat" operator has been renamed to "$join", as this operation is
+called "join" in many languages, e.g. Python and Javascript. "$concat" is
+reserved for a future operator to concatenate arrays.
+
+In addition, many more operators are supported through the inclusion of
+the chance.js library, and the extended template syntax with handlebar templates.
+
+
 ## License
 
 Apache 2.0
 
+[mgenerate-mtools]: https://github.com/rueckstiess/mtools/wiki/mgenerate
+[array-syntax]: https://github.com/rueckstiess/mtools/wiki/mgenerate#parsing-the-json-document
+[mtools]: https://github.com/rueckstiess/mtools/
 [chance-js]: http://chancejs.com/
 [regexp]: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/RegExp
 [bson-spec]: http://bsonspec.org/spec.html
