@@ -471,7 +471,7 @@ _Options_
 
 
 
-### `$regex`
+### `$timestamp`
 
 Returns a MongoDB Timestamp object.
 
