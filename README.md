@@ -1,6 +1,6 @@
-# mgenerate-js [![travis][travis_img]][travis_url] [![npm][npm_img]][npm_url]
+# mgeneratejs [![travis][travis_img]][travis_url] [![npm][npm_img]][npm_url]
 
-> A data generator.
+Generate rich random data based on a JSON template file.
 
 ## Example
 
@@ -11,7 +11,7 @@
 
 Apache 2.0
 
-[travis_img]: https://img.shields.io/travis/mongodb-js/mgenerate-js.svg
-[travis_url]: https://travis-ci.org/mongodb-js/mgenerate-js
-[npm_img]: https://img.shields.io/npm/v/mgenerate-js.svg
-[npm_url]: https://npmjs.org/package/mgenerate-js
+[travis_img]: https://img.shields.io/travis/rueckstiess/mgeneratejs.svg
+[travis_url]: https://travis-ci.org/rueckstiess/mgeneratejs
+[npm_img]: https://img.shields.io/npm/v/mgeneratejs.svg
+[npm_url]: https://npmjs.org/package/mgeneratejs
