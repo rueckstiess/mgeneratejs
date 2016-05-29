@@ -1,7 +1,7 @@
 {
   "name": "mgenerate-js",
   "description": "A data generator.",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "scripts": {
     "fmt": "mongodb-js-fmt",
     "check": "mongodb-js-precommit",
