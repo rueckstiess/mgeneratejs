@@ -80,6 +80,10 @@ context('Operators', function() {
       var res = mgenerate({color: {$pick: {array: ['green', 'red', 'blue'], element: 1}}});
       assert.equal(res.color, 'red');
     });
+    it('should pick the first element if `element` is not specified', function() {
+      var res = mgenerate({color: {$pick: {array: ['green', 'red', 'blue']}}});
+      assert.equal(res.color, 'green');
+    });
     it('should return $missing if element is out of array bounds', function() {
       var res = mgenerate({color: {$pick: {array: ['green', 'red', 'blue'], element: 3}}});
       assert.ok(!_.has(res, 'color'));

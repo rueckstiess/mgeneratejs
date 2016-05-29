@@ -97,11 +97,11 @@ mgeneratejs '{"ip_addresses": {"$array": {"of": "$ip", "number": {"$integer": {"
 {"ip_addresses":["199.209.162.241"]}
 ```
 
-### List of Built-in Operators
+## List of Built-in Operators
 
-#### General Operators
+### General Operators
 
-#### `$inc`
+### `$inc`
 
 Generate natural numbers in increasing order.
 
@@ -117,7 +117,7 @@ _Options_
 >
 > Assigns the numbers 0, 2, 4, 6, ... to subsequent objects.
 
-#### `$array`
+### `$array`
 
 Creates an array of values. Each new element is evaluated separately.
 
@@ -134,7 +134,7 @@ _Options_
 > Creates an array of 3 countries, e.g. `{"countries":["Czech Republic","Ireland","Argentina"]}`
 
 
-#### `$choose`
+### `$choose`
 
 Chooses one element from an array of possible choices with uniform probability.
 Optionally chooses with probability proportional to a provided `weights` array.
@@ -154,12 +154,216 @@ _Options_
 
 
 
-##### $pick
-##### $join
-##### $inc
-##### $date
+### `$pick`
 
-#### Geospatial Operators
+Takes an array and a number `element` and returns the `element`-th value of
+the array. If the number is larger than the length of the array, return
+`$missing` instead, which will remove the key from the resulting document.
+`element` is zero-based (`0` returns the first element).
+
+_Options_
+- `array` (required) Array of values or operators to choose from.
+- `element` (optional) Index of the array element to pick. Default `0`.
+
+> **Example**
+>
+> ```
+>  {"color": {"$pick": {"array": ["green", "red", "blue"], "element": 1}}}
+> ```
+>
+> Returns `{"color": "red"}`.
+
+
+### `$join`
+
+Takes an array `array` and a separator string `sep` and joins the elements
+of the array (each cast to string) separated by `sep`. The default separator
+is the empty string ''.
+
+_Options_
+- `array` (required) Array of values to be joined (cast to string).
+- `sep` (optional) Separator string. Default `''` (empty string).
+
+> **Example**
+>
+> ```
+> {"code": {"$join": {"array": ["foo", "bar", "baz"], "sep": "-"}}}
+> ```
+>
+> Returns `{"code": "foo-bar-baz"}`.
+
+
+### `$date`
+
+Returns a random date object, optionally between specified `min` and `max` values.
+If `min` and/or `max` are provided, they need to be in a format that [Date.parse()][date-parse]
+can read, e.g. ISO-8601.
+
+_Aliases_
+- `$datetime`
+
+_Options_
+- `min` (optional) Minimum date, as parseable string.
+- `max` (optional) Maximum date, as parsable string.
+
+> **Example**
+>
+> ```
+> {"last_login": {"$date": {"min": "2015-01-01", "max": "2016-12-31T23:59:59.999Z"}}}
+> ```
+>
+> Returns a random date and time between 2015 and 2016 (incl.), e.g.
+> `{"last_login":{"$date":"2016-06-28T15:28:54.721Z"}}`.
+
+### Geospatial Operators
+
+
+### `$coordinates`
+
+Returns a 2-element array of longitude/latitude coordinates, optionally within
+`long_lim` and/or `lat_lim` bounds.
+
+_Aliases_
+- `$coord`
+- `$coordinate`
+
+_Options_
+- `long_lim` (optional) Array of longitude bounds. Default `[-180, 180]`.
+- `lat_lim` (optional) Array of latitude bounds. Default `[-90, 90]`.
+
+> **Example**
+>
+> ```
+> {"position": {"$coordinates": {"long_lim": [-20, -19]}}}
+> ```
+>
+> Returns a pair of coordinates with the longitude bounds between -20 and -19,
+> e.g. `{"position":[-19.96851,-47.46141]}`.
+
+
+### `$point`
+
+Like `$coordinates`, but returns a GeoJSON formatted
+[Point](http://geojson.org/geojson-spec.html#id2), optionally within
+`long_lim` and/or `lat_lim` bounds.
+
+_Options_
+- `long_lim` (optional) Array of longitude bounds. Default `[-180, 180]`.
+- `lat_lim` (optional) Array of latitude bounds. Default `[-90, 90]`.
+
+> **Example**
+>
+> ```
+> {"position": {"$point": {"long_lim": [-20, -19]}}}
+> ```
+>
+> Returns a GeoJSON Point with the longitude bounds between -20 and -19,
+> e.g. `{"position": {"type": "Point", "coordinates": [-19.96851,-47.46141]}}`.
+
+linestring: require('./linestring'),
+polygon: require('./polygon'),
+geometries: require('./geometries'),
+
+
+### `$linestring`
+
+Returns a GeoJSON formatted [LineString](http://geojson.org/geojson-spec.html#id3)
+with optionally `locs` locations and within `long_lim` and/or `lat_lim` bounds.
+
+_Options_
+- `locs` (optional) Number of locations in the line string. Default `2`.
+- `long_lim` (optional) Array of longitude bounds. Default `[-180, 180]`.
+- `lat_lim` (optional) Array of latitude bounds. Default `[-90, 90]`.
+
+> **Example**
+>
+> ```
+> {"line": "$linestring"}
+> ```
+>
+> Returns a GeoJSON line string with 2 locations,
+> e.g. `{"line":{"type":"LineString","coordinates":[[35.67106,-41.9745],[120.07739,68.46491]]}}`.
+
+### `$polygon`
+
+Returns a GeoJSON formatted [Polygon](http://geojson.org/geojson-spec.html#id4)
+(without holes) with `corners` corners, optionally within `long_lim` and/or
+`lat_lim` bounds. The last point in the `coordinates` array closes the polygon
+and does not count towards the number of corners.
+
+_Options_
+- `corners` (optional) Number of corners in the polygon. Default `3`.
+- `long_lim` (optional) Array of longitude bounds. Default `[-180, 180]`.
+- `lat_lim` (optional) Array of latitude bounds. Default `[-90, 90]`.
+
+> **Example**
+>
+> ```
+> {"area": {"$polygon": {"corners": 5}}}
+> ```
+>
+> Returns a GeoJSON polygon with 5 corners,
+> e.g. `{"area":{"type":"Polygon","coordinates":[[[-75.26507,81.14973],[-12.29368,64.22995],[60.43231,-15.97496],[-133.6566,-40.40259],[-130.31348,-87.36982],[-75.26507,81.14973]]]}}`.
+
+
+### `$geometries`
+
+Returns a GeoJSON formatted [GeometryCollection](http://geojson.org/geojson-spec.html#geometrycollection)
+with `number` geometries. By default, the geometries are chosen from `Point`,
+`LineString` and `Polygon`. A subset of types can be specified with the `types`
+option.
+
+Additional options are passed onto each geometry, e.g. `corners` is passed
+to polygons, `locs` is passed to line strings.
+
+optionally within `long_lim` and/or
+`lat_lim` bounds. The last point in the `coordinates` array closes the polygon
+and does not count towards the number of corners.
+
+_Options_
+- `number` (optional) Number of geometries in the collection. Default `3`.
+- `types` (optional) Types of geometries to choose from. Default `["Point", "LineString", "Polygon"]`.
+- `locs` (optional) Number of locations in a line string. Default `2`.
+- `corners` (optional) Number of corners in a polygon. Default `3`.
+- `long_lim` (optional) Array of longitude bounds. Default `[-180, 180]`.
+- `lat_lim` (optional) Array of latitude bounds. Default `[-90, 90]`.
+
+> **Example**
+>
+> ```
+> {"triangles": {"$geometries": {"types": ["Polygon"], "corners": 3, "number": 4}}}
+> ```
+>
+> Returns a GeoJSON GeometryCollection with 4 triangles.
+> ```
+> {
+>   "triangles": {
+>     "type": "GeometryCollection",
+>     "geometries": [
+>       {
+>         "coordinates": [[[39.3259,-16.71813],[172.02089,-14.75681],[61.97122,-1.4036],[39.3259,-16.71813]]],
+>         "type": "Polygon"
+>       },
+>       {
+>         "coordinates": [[[57.66865,-18.3085],[-48.81722,-40.64912],[-145.11102,32.8189],[57.66865,-18.3085]]],
+>         "type": "Polygon"
+>       },
+>       {
+>         "coordinates": [[[110.68379,28.31158],[-73.67573,-19.54736],[-73.29514,52.07583],[110.68379,28.31158]]],
+>         "type": "Polygon"
+>       },
+>       {
+>         "coordinates": [[[-29.36382,79.19853],[138.84298,7.43148],[176.28313,36.83292],[-29.36382,79.19853]]],
+>         "type": "Polygon"
+>       }
+>     ]
+>   }
+> }
+> ```
+
+
+
+
 
 #### MongoDB Native Types
 
@@ -169,6 +373,7 @@ _Options_
 
 Apache 2.0
 
+[date-parse]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse
 [travis_img]: https://img.shields.io/travis/rueckstiess/mgeneratejs.svg
 [travis_url]: https://travis-ci.org/rueckstiess/mgeneratejs
 [npm_img]: https://img.shields.io/npm/v/mgeneratejs.svg
