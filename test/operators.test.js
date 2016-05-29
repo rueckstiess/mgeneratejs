@@ -2,6 +2,7 @@ var mgenerate = require('../');
 var operators = require('../lib/operators');
 var assert = require('assert');
 var _ = require('lodash');
+var bson = require('bson');
 
 context('Operators', function() {
   describe('$inc', function() {
@@ -107,6 +108,11 @@ context('Operators', function() {
       }));
     });
 
+    it('should return an empty array if no number is specified', function() {
+      var res = mgenerate({foo: '$array'});
+      assert.deepEqual(res.foo, []);
+    });
+
     it('should evaluate the `number` option before creating the array', function() {
       var res = mgenerate({
         myarr: {$array: {of: '$integer', number: {$number: {min: 6, max: 6}}}}
@@ -204,15 +210,30 @@ context('Operators', function() {
   });
 
   describe('$objectid', function() {
-    it('not implemented yet');
+    it('should generate an ObjectID', function() {
+      var res = mgenerate({_id: '$objectid'});
+      assert.ok(_.has(res, '_id'));
+      assert.ok(res._id instanceof bson.ObjectID);
+    });
   });
 
   describe('$regex', function() {
-    it('not implemented yet');
+    it('should generate a regular expression', function() {
+      var res = mgenerate({rx: {'$regex': {'string': 'foo+bar.*\n$', 'flags': 'i'}}});
+      assert.ok(_.has(res, 'rx'));
+      assert.ok(res.rx instanceof RegExp);
+      assert.equal(res.rx.toString(), '/foo+bar.*\n$/i');
+    });
   });
 
   describe('$timestamp', function() {
-    it('not implemented yet');
+    it('should generate an ObjectID', function() {
+      var res = mgenerate({ts: {'$timestamp': {'t': 15, 'i': 3}}});
+      assert.ok(_.has(res, 'ts'));
+      assert.ok(res.ts instanceof bson.Timestamp);
+      assert.equal(res.ts.low_, 15);
+      assert.equal(res.ts.high_, 3);
+    });
   });
 
   describe('$linestring', function() {
@@ -224,11 +245,19 @@ context('Operators', function() {
   });
 
   describe('$minkey', function() {
-    it('not implemented yet');
+    it('should generate a MinKey object', function() {
+      var res = mgenerate({min: '$minkey'});
+      assert.ok(_.has(res, 'min'));
+      assert.ok(res.min instanceof bson.MinKey);
+    });
   });
 
   describe('$maxkey', function() {
-    it('not implemented yet');
+    it('should generate a MaxKey object', function() {
+      var res = mgenerate({max: '$maxkey'});
+      assert.ok(_.has(res, 'max'));
+      assert.ok(res.max instanceof bson.MaxKey);
+    });
   });
 
   describe('$string', function() {

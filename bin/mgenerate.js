@@ -3,6 +3,8 @@
 var es = require('event-stream');
 var mgenerate = require('../');
 var _ = require('lodash');
+
+/* eslint no-sync: 0 */
 var read = require('fs').readFileSync;
 var eJSONStringifyStream = require('mongodb-extended-json').createStringifyStream;
 
