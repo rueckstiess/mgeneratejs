@@ -97,9 +97,9 @@ mgeneratejs '{"ip_addresses": {"$array": {"of": "$ip", "number": {"$integer": {"
 {"ip_addresses":["199.209.162.241"]}
 ```
 
-## List of Built-in Operators
+## Built-in Operators
 
-### General Operators
+#### General
 
 - [`$array`](#array): Creates an array of values.
 - [`$choose`](#choose): Chooses one element from an array of possible choices.
@@ -107,7 +107,7 @@ mgeneratejs '{"ip_addresses": {"$array": {"of": "$ip", "number": {"$integer": {"
 - [`$join`](#join): Joins elements of an array to a string.
 - [`$pick`](#pick): Returns an element from an array.
 
-### Geospatial Operators
+#### Geospatial
 
 - [`$coordinates`](#coordinates): Returns a pair of longitude/latitude coordinates.
 - [`$point`](#point): Returns a GeoJSON Point.
@@ -115,7 +115,7 @@ mgeneratejs '{"ip_addresses": {"$array": {"of": "$ip", "number": {"$integer": {"
 - [`$polygon`](#polygon): Returns a GeoJSON Polygon.
 - [`$geometries`](#geometries): Returns a GeoJSON GeometryCollection.
 
-### Native and MongoDB-specific Types
+#### Native and MongoDB-specific Types
 
 - [`$binary`](#binary): Returns a MongoDB Binary type.
 - [`$date`](#date): Returns a random date, optionally in a given range.
@@ -125,6 +125,8 @@ mgeneratejs '{"ip_addresses": {"$array": {"of": "$ip", "number": {"$integer": {"
 - [`$regex`](#regex): Returns a Regular Expression object.
 - [`$timestamp`](#timestamp): Returns a MongoDB Timestamp.
 
+
+### All Built-in Operators in Alphabetical Order
 
 ### `$array`
 
@@ -141,6 +143,24 @@ _Options_
 > ```
 >
 > Creates an array of 3 countries, e.g. `{"countries":["Czech Republic","Ireland","Argentina"]}`
+
+
+### `$binary`
+
+Returns a random MongoDB Binary value, optionally with a `length` and `subtype`.
+
+_Options_
+- `length` (optional) Length in bytes of binary value. Default `10`.
+- `subtype` (optional) Specific binary subtype (see [BSON spec][bson-spec]). Default `0`.
+
+> **Example**
+>
+> ```
+> {"blob": "$binary"}
+> ```
+>
+> Returns a Binary object (stringified to extended JSON on stdout).
+> e.g. `{"blob":{"$binary":"TzhXcFZoRllRNg==","$type":"0"}}`.
 
 
 ### `$choose`
@@ -160,85 +180,6 @@ _Options_
 >
 > Returns `{"status": "read"}` with probability 1/2, and `{"status": "unread"}` and
 > `{"status": "deleted"}` each with probability 1/4.
-
-### `$date`
-
-Returns a random date object, optionally between specified `min` and `max` values.
-If `min` and/or `max` are provided, they need to be in a format that [Date.parse()][date-parse]
-can read, e.g. ISO-8601.
-
-_Aliases_
-- `$datetime`
-
-_Options_
-- `min` (optional) Minimum date, as parseable string.
-- `max` (optional) Maximum date, as parsable string.
-
-> **Example**
->
-> ```
-> {"last_login": {"$date": {"min": "2015-01-01", "max": "2016-12-31T23:59:59.999Z"}}}
-> ```
->
-> Returns a random date and time between 2015 and 2016 (incl.), e.g.
-> `{"last_login":{"$date":"2016-06-28T15:28:54.721Z"}}`.
-
-
-### `$inc`
-
-Generate natural numbers in increasing order.
-
-_Options_
-- `start` (optional) starts counting at this value. Default `0`.
-- `step` (optional) increases by this amount each time. Default `1`. Can also take negative value.
-
-> **Example**
->
-> ```
-> {"even_numbers": {"$inc": {"start": 0, "step": 2}}}
-> ```
->
-> Assigns the numbers 0, 2, 4, 6, ... to subsequent objects.
-
-
-
-### `$pick`
-
-Takes an array and a number `element` and returns the `element`-th value of
-the array. If the number is larger than the length of the array, return
-`$missing` instead, which will remove the key from the resulting document.
-`element` is zero-based (`0` returns the first element).
-
-_Options_
-- `array` (required) Array of values or operators to choose from.
-- `element` (optional) Index of the array element to pick. Default `0`.
-
-> **Example**
->
-> ```
->  {"color": {"$pick": {"array": ["green", "red", "blue"], "element": 1}}}
-> ```
->
-> Returns `{"color": "red"}`.
-
-
-### `$join`
-
-Takes an array `array` and a separator string `sep` and joins the elements
-of the array (each cast to string) separated by `sep`. The default separator
-is the empty string ''.
-
-_Options_
-- `array` (required) Array of values to be joined (cast to string).
-- `sep` (optional) Separator string. Default `''` (empty string).
-
-> **Example**
->
-> ```
-> {"code": {"$join": {"array": ["foo", "bar", "baz"], "sep": "-"}}}
-> ```
->
-> Returns `{"code": "foo-bar-baz"}`.
 
 
 ### `$coordinates`
@@ -264,69 +205,27 @@ _Options_
 > e.g. `{"position":[-19.96851,-47.46141]}`.
 
 
-### `$point`
+### `$date`
 
-Like `$coordinates`, but returns a GeoJSON formatted
-[Point](http://geojson.org/geojson-spec.html#id2), optionally within
-`long_lim` and/or `lat_lim` bounds.
+Returns a random date object, optionally between specified `min` and `max` values.
+If `min` and/or `max` are provided, they need to be in a format that [Date.parse()][date-parse]
+can read, e.g. ISO-8601.
+
+_Aliases_
+- `$datetime`
 
 _Options_
-- `long_lim` (optional) Array of longitude bounds. Default `[-180, 180]`.
-- `lat_lim` (optional) Array of latitude bounds. Default `[-90, 90]`.
+- `min` (optional) Minimum date, as parseable string.
+- `max` (optional) Maximum date, as parsable string.
 
 > **Example**
 >
 > ```
-> {"position": {"$point": {"long_lim": [-20, -19]}}}
+> {"last_login": {"$date": {"min": "2015-01-01", "max": "2016-12-31T23:59:59.999Z"}}}
 > ```
 >
-> Returns a GeoJSON Point with the longitude bounds between -20 and -19,
-> e.g. `{"position": {"type": "Point", "coordinates": [-19.96851,-47.46141]}}`.
-
-linestring: require('./linestring'),
-polygon: require('./polygon'),
-geometries: require('./geometries'),
-
-
-### `$linestring`
-
-Returns a GeoJSON formatted [LineString](http://geojson.org/geojson-spec.html#id3)
-with optionally `locs` locations and within `long_lim` and/or `lat_lim` bounds.
-
-_Options_
-- `locs` (optional) Number of locations in the line string. Default `2`.
-- `long_lim` (optional) Array of longitude bounds. Default `[-180, 180]`.
-- `lat_lim` (optional) Array of latitude bounds. Default `[-90, 90]`.
-
-> **Example**
->
-> ```
-> {"line": "$linestring"}
-> ```
->
-> Returns a GeoJSON line string with 2 locations,
-> e.g. `{"line":{"type":"LineString","coordinates":[[35.67106,-41.9745],[120.07739,68.46491]]}}`.
-
-### `$polygon`
-
-Returns a GeoJSON formatted [Polygon](http://geojson.org/geojson-spec.html#id4)
-(without holes) with `corners` corners, optionally within `long_lim` and/or
-`lat_lim` bounds. The last point in the `coordinates` array closes the polygon
-and does not count towards the number of corners.
-
-_Options_
-- `corners` (optional) Number of corners in the polygon. Default `3`.
-- `long_lim` (optional) Array of longitude bounds. Default `[-180, 180]`.
-- `lat_lim` (optional) Array of latitude bounds. Default `[-90, 90]`.
-
-> **Example**
->
-> ```
-> {"area": {"$polygon": {"corners": 5}}}
-> ```
->
-> Returns a GeoJSON polygon with 5 corners,
-> e.g. `{"area":{"type":"Polygon","coordinates":[[[-75.26507,81.14973],[-12.29368,64.22995],[60.43231,-15.97496],[-133.6566,-40.40259],[-130.31348,-87.36982],[-75.26507,81.14973]]]}}`.
+> Returns a random date and time between 2015 and 2016 (incl.), e.g.
+> `{"last_login":{"$date":"2016-06-28T15:28:54.721Z"}}`.
 
 
 ### `$geometries`
@@ -385,15 +284,239 @@ _Options_
 > ```
 
 
+### `$inc`
+
+Generate natural numbers in increasing order.
+
+_Options_
+- `start` (optional) starts counting at this value. Default `0`.
+- `step` (optional) increases by this amount each time. Default `1`. Can also take negative value.
+
+> **Example**
+>
+> ```
+> {"even_numbers": {"$inc": {"start": 0, "step": 2}}}
+> ```
+>
+> Assigns the numbers 0, 2, 4, 6, ... to subsequent objects.
+
+
+### `$join`
+
+Takes an array `array` and a separator string `sep` and joins the elements
+of the array (each cast to string) separated by `sep`. The default separator
+is the empty string ''.
+
+_Options_
+- `array` (required) Array of values to be joined (cast to string).
+- `sep` (optional) Separator string. Default `''` (empty string).
+
+> **Example**
+>
+> ```
+> {"code": {"$join": {"array": ["foo", "bar", "baz"], "sep": "-"}}}
+> ```
+>
+> Returns `{"code": "foo-bar-baz"}`.
+
+
+### `$linestring`
+
+Returns a GeoJSON formatted [LineString](http://geojson.org/geojson-spec.html#id3)
+with optionally `locs` locations and within `long_lim` and/or `lat_lim` bounds.
+
+_Options_
+- `locs` (optional) Number of locations in the line string. Default `2`.
+- `long_lim` (optional) Array of longitude bounds. Default `[-180, 180]`.
+- `lat_lim` (optional) Array of latitude bounds. Default `[-90, 90]`.
+
+> **Example**
+>
+> ```
+> {"line": "$linestring"}
+> ```
+>
+> Returns a GeoJSON line string with 2 locations,
+> e.g. `{"line":{"type":"LineString","coordinates":[[35.67106,-41.9745],[120.07739,68.46491]]}}`.
+
+
+### `$maxkey`
+
+Returns the MongoDB MaxKey value.
+
+
+> **Example**
+>
+> ```
+> {"upper_bound": "$maxkey"}
+> ```
+>
+> Returns `{"upper_bound":{"$maxKey":1}}`.
+
+
+### `$minkey`
+
+Returns the MongoDB MinKey value.
+
+
+> **Example**
+>
+> ```
+> {"lower_bound": "$minkey"}
+> ```
+>
+> Returns `{"lower_bound":{"$minKey":1}}`.
+
+
+### `$objectid`
+
+Returns a new MongoDB ObjectId.
+
+_Aliases_
+
+- `$oid`
+
+
+> **Example**
+>
+> ```
+> {"_id": "$objectid"}
+> ```
+>
+> Returns `{"_id":{"$oid":"574ac75f725f4447309ab587"}}`.
+
+
+### `$pick`
+
+Takes an array and a number `element` and returns the `element`-th value of
+the array. If the number is larger than the length of the array, return
+`$missing` instead, which will remove the key from the resulting document.
+`element` is zero-based (`0` returns the first element).
+
+_Options_
+- `array` (required) Array of values or operators to choose from.
+- `element` (optional) Index of the array element to pick. Default `0`.
+
+> **Example**
+>
+> ```
+>  {"color": {"$pick": {"array": ["green", "red", "blue"], "element": 1}}}
+> ```
+>
+> Returns `{"color": "red"}`.
+
+
+### `$point`
+
+Like `$coordinates`, but returns a GeoJSON formatted
+[Point](http://geojson.org/geojson-spec.html#id2), optionally within
+`long_lim` and/or `lat_lim` bounds.
+
+_Options_
+- `long_lim` (optional) Array of longitude bounds. Default `[-180, 180]`.
+- `lat_lim` (optional) Array of latitude bounds. Default `[-90, 90]`.
+
+> **Example**
+>
+> ```
+> {"position": {"$point": {"long_lim": [-20, -19]}}}
+> ```
+>
+> Returns a GeoJSON Point with the longitude bounds between -20 and -19,
+> e.g. `{"position": {"type": "Point", "coordinates": [-19.96851,-47.46141]}}`.
+
+linestring: require('./linestring'),
+polygon: require('./polygon'),
+geometries: require('./geometries'),
+
+
+### `$polygon`
+
+Returns a GeoJSON formatted [Polygon](http://geojson.org/geojson-spec.html#id4)
+(without holes) with `corners` corners, optionally within `long_lim` and/or
+`lat_lim` bounds. The last point in the `coordinates` array closes the polygon
+and does not count towards the number of corners.
+
+_Options_
+- `corners` (optional) Number of corners in the polygon. Default `3`.
+- `long_lim` (optional) Array of longitude bounds. Default `[-180, 180]`.
+- `lat_lim` (optional) Array of latitude bounds. Default `[-90, 90]`.
+
+> **Example**
+>
+> ```
+> {"area": {"$polygon": {"corners": 5}}}
+> ```
+>
+> Returns a GeoJSON polygon with 5 corners,
+> e.g. `{"area":{"type":"Polygon","coordinates":[[[-75.26507,81.14973],[-12.29368,64.22995],[60.43231,-15.97496],[-133.6566,-40.40259],[-130.31348,-87.36982],[-75.26507,81.14973]]]}}`.
+
+
+### `$regex`
+
+Returns a [RegExp][regexp] object.
+
+_Options_
+
+- `string` (optional) The regular expression string. Default `'.*'`.
+- `flags` (optional) Flags for the RegExp object. Default `''`.
+
+> **Example**
+>
+> ```
+> {"expr": {"$regex": {"string": "^ab+c$", "flags": "i"}}}
+> ```
+>
+> Returns `{"expr":{"$regex":"^ab+c$","$options":"i"}}`.
+
+
+
+### `$regex`
+
+Returns a MongoDB Timestamp object.
+
+_Options_
+
+- `t` (optional) Set the low value to the specified value. Default random.
+- `i` (optional) Set the high value to the specified value. Default random.
+
+
+> **Example**
+>
+> ```
+> {"ts": {"$timestamp": {"t": 10, "i": 20}}}
+> ```
+>
+> Returns `{"ts":{"$timestamp":{"t":10,"i":20}}}`.
+
 
 ## Chance.js
 
+All other `$`-prefixed strings that don't match any of the built-in operators above
+are passed on to the [chance.js][chance-js] library. Use the string format for
+default options, or pass in custom options with the object format.
+
+Some Examples:
+
+```
+{"ip_address": "$ip"}
+{"percent": {"$floating": {"min": 0, "max": 100, "fixed": 8}}}
+{"birthday": {"$birthday": {"type": "child"}}}
+{"phone_no": "$phone"}
+{"full_name": {"$name": {"gender": "female"}}}
+```
+
 ## Advanced Templates
+
+TBD.
 
 ## License
 
 Apache 2.0
 
+[chance-js]: http://chancejs.com/
+[regexp]: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/RegExp
+[bson-spec]: http://bsonspec.org/spec.html
 [date-parse]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse
 [travis_img]: https://img.shields.io/travis/rueckstiess/mgeneratejs.svg
 [travis_url]: https://travis-ci.org/rueckstiess/mgeneratejs
