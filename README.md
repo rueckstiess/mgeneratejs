@@ -7,15 +7,15 @@ template object. It offers both a command line script and a Javascript API.
 ## Example
 
 ```
-mgeneratejs '{"name": "$name", "phone_no": "$phone", "emails": {"$array": {"of": "$email", "number": 3}}}' -n 5
+mgeneratejs '{"name": "$name", "age": "$age", "emails": {"$array": {"of": "$email", "number": 3}}}' -n 5
 ```
 Results in:
 ```
-{"name":"Dennis White","phone_no":"(206) 693-4614","emails":["muumi@bacivme.rw","zifode@waldi.rs","liwofmap@birovip.uy"]}
-{"name":"Harold Bowen","phone_no":"(439) 733-4688","emails":["puvehcu@hok.kp","fe@nopeiha.tv","migtopwuf@zowhod.pk"]}
-{"name":"Cole Harmon","phone_no":"(671) 594-5103","emails":["tosel@takwustih.cy","wo@towa.dm","ji@nocso.ly"]}
-{"name":"Roy Watkins","phone_no":"(958) 393-8648","emails":["co@johulziv.va","kinlies@be.ph","ojure@go.aw"]}
-{"name":"Terry Hammond","phone_no":"(745) 822-1876","emails":["hepe@utza.hk","mole@tosuhaba.bm","fusborub@fuhanam.ml"]}
+{"name":"Glenn Simmons","age":32,"emails":["ivuge@afovopid.tt","gied@orsin.zw","wuhowbi@con.uk"]}
+{"name":"Jane Santiago","age":57,"emails":["oliclon@ohaoni.la","hetoufi@em.ug","ecwawce@sewwato.kn"]}
+{"name":"Winifred Martinez","age":59,"emails":["veag@gi.fm","liwfecor@vifbevof.gr","siwluz@habif.gf"]}
+{"name":"Helena Chandler","age":65,"emails":["ga@latcon.tr","wur@helmawak.im","ovpifuva@gabruzup.vc"]}
+{"name":"Gary Allison","age":30,"emails":["wiko@unuwudu.za","fog@zokje.sh","juppojer@jadi.tl"]}
 ```
 
 ## Template Syntax
@@ -26,21 +26,6 @@ The output has the same shape as the input template (including nested keys), wit
 one exception: If a key is assigned the special value `$missing`, then the
 key is not present in the output (see `$missing` below for an example).
 
-<!-- Example:
-```
-mgeneratejs '{"name": "Thomas", "age": "$age", "invisible": "$missing"}' -n 5
-```
-
-This example generates 5 objects with the literal name `Thomas`, a variable
-age field (using the `$age` operator) and no `invisible` key.
-
-```
-{"name":"Thomas","age":29}
-{"name":"Thomas","age":48}
-{"name":"Thomas","age":20}
-{"name":"Thomas","age":54}
-{"name":"Thomas","age":54}
-``` -->
 
 ### Values
 
@@ -53,13 +38,13 @@ a shortcut to call the operator with default options.
 String format:
 
 ```
-{ "key": "$operator" }
+{"key": "$operator"}
 ```
 
 Object format:
 
 ```
-{ "key": { "$operator": { <additional options> } } }
+{"key": {"$operator": { <additional options> }}}
 ```
 
 Most operators have sensible default values that are used for their string format.
@@ -81,7 +66,7 @@ The object format allows to pass in additional options to the operator,
 here, a minimum and maximum for the value:
 
 ```
-mgeneratejs '{"born_in": {"$year": {"min": 1930, "max": 1970} }}'
+mgeneratejs '{"born_in": {"$year": {"min": 1930, "max": 1970}}}'
 ```
 ```
 {"born_in":"1936"}
@@ -149,7 +134,26 @@ _Options_
 > Creates an array of 3 countries, e.g. `{"countries":["Czech Republic","Ireland","Argentina"]}`
 
 
-##### $choose
+#### `$choose`
+
+Chooses one element from an array of possible choices with uniform probability.
+Optionally chooses with probability proportional to a provided `weights` array.
+
+_Options_
+- `from` (required) Array of values or operators to choose from.
+- `weights` (optional) Number of elements. Default `0`.
+
+> **Example**
+>
+> ```
+> {"status": {"$choose": {"from": ["read", "unread", "deleted"], "weights": [2, 1, 1]}}}
+> ```
+>
+> Returns `{"status": "read"}` with probability 1/2, and `{"status": "unread"}` and
+> `{"status": "deleted"}` each with probability 1/4.
+
+
+
 ##### $pick
 ##### $join
 ##### $inc
