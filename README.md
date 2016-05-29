@@ -534,6 +534,9 @@ format with named options. See [array shortcut syntax][array-syntax].
 2. The "$concat" operator has been renamed to "$join", as this operation is
 called "join" in many languages, e.g. Python and Javascript. "$concat" is
 reserved for a future operator to concatenate arrays.
+3. mgeneratejs does not insert documents directly into MongoDB, it only outputs
+to stdout. It doesn't make sense to re-implement all the authentication options
+separately, when the resulting objects can simply be piped to mongoimport.
 
 In addition, many more operators are supported through the inclusion of
 the chance.js library, and the extended template syntax with handlebar templates.
