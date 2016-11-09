@@ -294,4 +294,57 @@ context('Operators', function() {
       assert.ok(_.isNumber(res.foo));
     });
   });
+
+  describe('$numberDecimal / $decimal', function() {
+    it('should work using $numberDecimal as string operator', function() {
+      var res = mgenerate({foo: '$numberDecimal'});
+      assert.ok(res.foo instanceof bson.Decimal128);
+    });
+    it('should work using $decimal as string operator', function() {
+      var res = mgenerate({foo: '$decimal'});
+      assert.ok(res.foo instanceof bson.Decimal128);
+    });
+    it('should work using $numberDecimal as object operator', function() {
+      var res = mgenerate({foo: {$numberDecimal: {}}});
+      assert.ok(res.foo instanceof bson.Decimal128);
+    });
+    it('should work using $decimal as object operator', function() {
+      var res = mgenerate({foo: {$decimal: {min: 90, max: 100}}});
+      assert.ok(res.foo instanceof bson.Decimal128);
+    });
+    it('should support min and max parameters', function() {
+      var res = mgenerate({foo: {$numberDecimal: {min: 9999, max: 9999}}});
+      var valStr = _.values(res.foo.toJSON())[0];
+      assert.ok(_.startsWith(valStr, '9999'));
+    });
+    it('should support fixed parameter', function() {
+      var res = mgenerate({foo: {$numberDecimal: {fixed: 5}}});
+      var valStr = _.values(res.foo.toJSON())[0];
+      assert.ok(valStr.match(/\.\d{5,5}/));
+    });
+  });
+
+  describe('$numberLong / $long', function() {
+    it('should work using $numberLong as string operator', function() {
+      var res = mgenerate({foo: '$numberLong'});
+      assert.ok(res.foo instanceof bson.Long);
+    });
+    it('should work using $decimal as string operator', function() {
+      var res = mgenerate({foo: '$long'});
+      assert.ok(res.foo instanceof bson.Long);
+    });
+    it('should work using $numberLong as object operator', function() {
+      var res = mgenerate({foo: {$numberLong: {}}});
+      assert.ok(res.foo instanceof bson.Long);
+    });
+    it('should work using $long as object operator', function() {
+      var res = mgenerate({foo: {$long: {min: 90, max: 100}}});
+      assert.ok(res.foo instanceof bson.Long);
+    });
+    it('should support min and max parameters', function() {
+      var res = mgenerate({foo: {$numberLong: {min: 9999, max: 9999}}});
+      var val = res.foo.toJSON();
+      assert.equal(val, 9999);
+    });
+  });
 });
