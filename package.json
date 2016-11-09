@@ -1,7 +1,7 @@
 {
   "name": "mgeneratejs",
   "description": "Generate rich random data based on a JSON template file.",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "scripts": {
     "fmt": "mongodb-js-fmt",
     "check": "mongodb-js-precommit",
