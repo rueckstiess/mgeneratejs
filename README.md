@@ -3,6 +3,11 @@
 _mgeneratejs_ generates structured, semi-random JSON data according to a
 template object. It offers both a command line script and a Javascript API.
 
+## Installation
+
+```
+npm install -g mgeneratejs
+```
 
 ## Example
 
