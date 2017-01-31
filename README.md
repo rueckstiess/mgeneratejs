@@ -18,6 +18,12 @@ Results in:
 {"name":"Gary Allison","age":30,"emails":["wiko@unuwudu.za","fog@zokje.sh","juppojer@jadi.tl"]}
 ```
 
+You can also specify a JSON file instead of a JSON string:
+```
+mgenerate template.json -n 5
+```
+
+
 ## Template Syntax
 
 ### Shape of objects
