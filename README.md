@@ -132,6 +132,8 @@ mgeneratejs '{"ip_addresses": {"$array": {"of": "$ip", "number": {"$integer": {"
 - [`$date`](#date): Returns a random date, optionally in a given range.
 - [`$maxkey`](#maxkey): Returns a MongoDB MaxKey object.
 - [`$minkey`](#minkey): Returns a MongoDB MinKey object.
+- [`$numberDecimal`](#numberdecimal): Returns a MongoDB Decimal128 number.
+- [`$numberLong`](#numberlong): Returns a MongoDB Long (Int64) number.
 - [`$objectid`](#objectid): Returns MongoDB ObjectID.
 - [`$regex`](#regex): Returns a Regular Expression object.
 - [`$timestamp`](#timestamp): Returns a MongoDB Timestamp.
@@ -377,6 +379,41 @@ Returns the MongoDB MinKey value.
 > ```
 >
 > Returns `{"lower_bound":{"$minKey":1}}`.
+
+
+### `$numberDecimal`
+
+Returns a MongoDB Decimal128 number.
+
+_Options_
+- `min` (optional) minimum value. Default `0`.
+- `max` (optional) maximum value. Default `1000`.
+- `fixed` (optional) number of digits after the decimal. Default `2`.
+
+> **Example**
+>
+> ```
+> {"price": {"$numberDecimal": {"fixed": 3}}}
+> ```
+>
+> Returns `{"price":{"$numberDecimal": "1545.241"}}`.
+
+
+### `$numberLong`
+
+Returns a MongoDB Long (Int64) number.
+
+_Options_
+- `min` (optional) minimum value. Default `-2^53`.
+- `max` (optional) maximum value. Default `2^53`.
+
+> **Example**
+>
+> ```
+> {"price": {"$numberLong": {"min": 100000}}}
+> ```
+>
+> Returns `{"price":{"$numberLong":"7624790980443125"}}`.
 
 
 ### `$objectid`
