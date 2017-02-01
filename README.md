@@ -31,6 +31,13 @@ mgenerate template.json -n 5
 
 ## Template Syntax
 
+The input string or file must be valid JSON, with one exception: As a convenience, from version 0.3.0 onwards, it's ok to omit quotes around keys, so both these templates are equivalent: 
+
+```
+{"name": "$name"}
+{name: "$name"}
+```
+
 ### Shape of objects
 
 The output has the same shape as the input template (including nested keys), with
