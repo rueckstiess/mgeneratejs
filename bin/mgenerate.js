@@ -10,6 +10,19 @@ var eJSONStringifyStream = require('mongodb-extended-json').createStringifyStrea
 
 // var debug = require('debug')('mgenerate:bin');
 
+/**
+ * applies a regex to quote all unquoted keys, then uses JSON.parse to
+ * convert template to a regular javascript object.
+ *
+ * @param  {String} template   JSON (or JS-style) template
+ * @return {Object}            template object
+ */
+function parseTemplate(template) {
+  // quote all unquoted keys first to make it valid JSON
+  template = template.replace(/([{,])\s*([^,{\s\'"]+)\s*:(?=([^"\\]*(\\.|"([^"\\]*\\.)*[^"\\]*"))*[^"]*$)/g, '$1"$2":');
+  return JSON.parse(template);
+}
+
 var yargs = require('yargs')
   .option('number', {
     alias: 'n',
@@ -22,18 +35,19 @@ var yargs = require('yargs')
     type: 'boolean',
     default: false
   })
-  .example('$0 -n 5 template.json', 'generates 5 documents based on the'
+  .example('mgeneratejs -n 5 template.json', 'generates 5 documents based on the'
            + ' given template file.\n')
-  .example('$0 \'{"name": "$name", "emails": {"$array": {"of": "$email", '
+  .example('mgeneratejs \'{"name": "$name", "emails": {"$array": {"of": "$email", '
            + '"number": 3}}}\'', 'generates 1 document based on the given'
            + ' JSON template.\n')
-  .example('cat template.json | $0 --number 20', 'pipe template file to mgenerate'
+  .example('cat template.json | mgeneratejs --number 20', 'pipe template file to mgenerate'
            + ' and generate 20 documents.\n')
-  .example('$0 -n3 --jsonArray < template.json', 'pipe template file to mgenerate'
+  .example('mgeneratejs -n3 --jsonArray < template.json', 'pipe template file to mgenerate'
           + ' and generate 3 documents as a JSON array.')
   .help()
-  // .epilogue('For more information, check the documentation at'
-  //   + ' https://github.com/rueckstiess/mgenerate.js')
+  .epilogue('Most operators from https://chancejs.com are available. For information'
+    + ' on the template format, check the documentation at'
+    + ' https://github.com/rueckstiess/mgenerate.js')
   .version()
   .strict()
   .wrap(100);
@@ -41,10 +55,10 @@ var yargs = require('yargs')
 
 if (process.stdin.isTTY) {
   // running in TTY mode, get template from non-positional argument
-  yargs.usage('Usage: $0 <options> [template]')
+  yargs.usage('Usage: mgeneratejs <options> [template]')
     .demand(1, 'must provide a template file or string');
 } else {
-  yargs.usage('Usage: $0 <options> < [template]');
+  yargs.usage('Usage: mgeneratejs <options> < [template]');
 }
 
 var argv = yargs.argv;
@@ -65,7 +79,7 @@ function generate() {
 
 if (process.stdin.isTTY) {
   var str = argv._[0];
-  template = _.startsWith(str, '{') ? JSON.parse(str) : JSON.parse(read(str));
+  template = _.startsWith(str, '{') ? parseTemplate(str) : parseTemplate(read(str));
   generate();
 } else {
   template = '';
