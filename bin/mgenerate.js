@@ -18,7 +18,6 @@ var eJSONStringifyStream = require('mongodb-extended-json').createStringifyStrea
  * @return {Object}            template object
  */
 function parseTemplate(template) {
-  console.log('template ====> ', template);
   // quote all unquoted keys first to make it valid JSON
   template = template.replace(/([{,])\s*([^,{\s\'"]+)\s*:(?=([^"\\]*(\\.|"([^"\\]*\\.)*[^"\\]*"))*[^"]*$)/g, '$1"$2":');
   return JSON.parse(template);
