@@ -79,7 +79,7 @@ function generate() {
 
 if (process.stdin.isTTY) {
   var str = argv._[0];
-  template = _.startsWith(str, '{') ? parseTemplate(str) : parseTemplate(read(str));
+  template = _.startsWith(str, '{') ? parseTemplate(str) : parseTemplate(read(str, 'utf8'));
   generate();
 } else {
   template = '';
