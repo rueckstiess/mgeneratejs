@@ -31,7 +31,7 @@ mgenerate template.json -n 5
 
 ## Template Syntax
 
-The input string or file must be valid JSON, with one exception: As a convenience, from version 0.3.0 onwards, it's ok to omit quotes around keys, so both these templates are equivalent: 
+The input string or file must be valid JSON, with one exception: As a convenience, from version 0.3.0 onwards, it's ok to omit quotes around keys, so both these templates are equivalent:
 
 ```
 {"name": "$name"}
@@ -137,6 +137,7 @@ mgeneratejs '{"ip_addresses": {"$array": {"of": "$ip", "number": {"$integer": {"
 
 - [`$binary`](#binary): Returns a MongoDB Binary type.
 - [`$date`](#date): Returns a random date, optionally in a given range.
+- [`$now`](#now): Returns the current date.
 - [`$maxkey`](#maxkey): Returns a MongoDB MaxKey object.
 - [`$minkey`](#minkey): Returns a MongoDB MinKey object.
 - [`$numberDecimal`](#numberdecimal): Returns a MongoDB Decimal128 number.
@@ -247,6 +248,22 @@ _Options_
 > Returns a random date and time between 2015 and 2016 (incl.), e.g.
 > `{"last_login":{"$date":"2016-06-28T15:28:54.721Z"}}`.
 
+
+### `$now`
+
+Returns the current date at creation time. Ideal for time-stamping documents.
+
+_Options_
+_none_
+
+> **Example**
+>
+> ```
+> {"created": "$now"}
+> ```
+>
+> Returns the extended JSON date and time at creation.
+> `{"created":{"$date":"2017-02-20T04:44:24.880Z"}}`.
 
 ### `$geometries`
 
