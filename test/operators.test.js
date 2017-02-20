@@ -221,6 +221,14 @@ context('Operators', function() {
     });
   });
 
+  describe('$now', function() {
+    it('should generate a current date', function() {
+      var res = mgenerate({when: '$now'});
+      assert.ok(_.has(res, 'when'));
+      assert.ok(res.when instanceof Date);
+    });
+  });
+
   describe('$regex', function() {
     it('should generate a regular expression', function() {
       var res = mgenerate({rx: {'$regex': {'string': 'foo+bar.*\n$', 'flags': 'i'}}});
