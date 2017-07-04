@@ -1,7 +1,7 @@
 # mgeneratejs [![travis][travis_img]][travis_url] [![npm][npm_img]][npm_url]
 
 _mgeneratejs_ generates structured, semi-random JSON data according to a
-template object. It offers both a command line script and a Javascript API.
+template object. It offers both a command line script and a JavaScript API.
 
 ## Installation
 
@@ -25,7 +25,7 @@ Results in:
 
 You can also specify a JSON file instead of a JSON string:
 ```
-mgenerate template.json -n 5
+mgeneratejs template.json -n 5
 ```
 
 
@@ -269,21 +269,17 @@ _none_
 
 Returns a GeoJSON formatted [GeometryCollection](http://geojson.org/geojson-spec.html#geometrycollection)
 with `number` geometries. By default, the geometries are chosen from `Point`,
-`LineString` and `Polygon`. A subset of types can be specified with the `types`
+`LineString`, and `Polygon`. A subset of types can be specified with the `types`
 option.
 
 Additional options are passed onto each geometry, e.g. `corners` is passed
 to polygons, `locs` is passed to line strings.
 
-optionally within `long_lim` and/or
-`lat_lim` bounds. The last point in the `coordinates` array closes the polygon
-and does not count towards the number of corners.
-
 _Options_
 - `number` (optional) Number of geometries in the collection. Default `3`.
 - `types` (optional) Types of geometries to choose from. Default `["Point", "LineString", "Polygon"]`.
 - `locs` (optional) Number of locations in a line string. Default `2`.
-- `corners` (optional) Number of corners in a polygon. Default `3`.
+- `corners` (optional) Number of corners in a polygon. Default `3`.  The last point in the `coordinates` array closes the polygon and does not count towards the number of corners.
 - `long_lim` (optional) Array of longitude bounds. Default `[-180, 180]`.
 - `lat_lim` (optional) Array of latitude bounds. Default `[-90, 90]`.
 
@@ -561,11 +557,10 @@ _Options_
 >
 > Returns `{"ts":{"$timestamp":{"t":10,"i":20}}}`.
 
-
 ## Chance.js
 
 All other `$`-prefixed strings that don't match any of the built-in operators above
-are passed on to the [chance.js][chance-js] library. Use the string format for
+are passed on to the [`Chance.js`][chance-js] library. Use the string format for
 default options, or pass in custom options with the object format.
 
 Some Examples:
@@ -596,23 +591,22 @@ mgeneratejs '{"recipient": "{{chance.name()}} <{{chance.email()}}>"}' -n 3
 
 ## Difference to mtools' mgenerate script
 
-This is a Javascript port from the [mgenerate][mgenerate-mtools] script in the
+This is a JavaScript port from the [`mgenerate`][mgenerate-mtools] script in the
 [mtools][mtools] library (of which I am also the author). It is mostly backwards
 compatible except for the following breaking changes:  
 
 1. The "array" operator format is no longer supported, as it was confusing
-which arguments need to be provided in which order. Instead, use the "object"
-format with named options. See [array shortcut syntax][array-syntax].
+   which arguments need to be provided in which order. Instead, use the "object"
+   format with named options. See [array shortcut syntax][array-syntax].
 2. The "$concat" operator has been renamed to "$join", as this operation is
-called "join" in many languages, e.g. Python and Javascript. "$concat" is
-reserved for a future operator to concatenate arrays.
-3. mgeneratejs does not insert documents directly into MongoDB, it only outputs
-to stdout. It doesn't make sense to re-implement all the authentication options
-separately, when the resulting objects can simply be piped to mongoimport.
+   called "join" in many languages, e.g. Python and JavaScript. "$concat" is
+   reserved for a future operator to concatenate arrays.
+3. `mgeneratejs` does not insert documents directly into MongoDB, it only outputs
+   to stdout. It doesn't make sense to re-implement all the authentication options
+   separately, when the resulting objects can simply be piped to mongoimport.
 
 In addition, many more operators are supported through the inclusion of
-the chance.js library, and the extended template syntax with handlebar templates.
-
+the `Chance.js` library, and the extended template syntax with handlebar templates.
 
 ## License
 
