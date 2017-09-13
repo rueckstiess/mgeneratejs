@@ -355,4 +355,16 @@ context('Operators', function() {
       assert.equal(val, 9999);
     });
   });
+  describe('$binary', function() {
+    it('subtype should be `00` instead of integer 0', function() {
+      var res = mgenerate({foo: {$binary: {length: 10}}});
+      var val = res.foo.sub_type;
+      assert.equal(val, '00');
+    });
+    it('should set the subtype to 01', function() {
+      var res = mgenerate({foo: {$binary: {length: 10, subtype: '01'}}});
+      var val = res.foo.sub_type;
+      assert.equal(val, '01');
+    });
+  });
 });
