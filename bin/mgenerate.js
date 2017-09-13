@@ -47,7 +47,7 @@ var yargs = require('yargs')
   .help()
   .epilogue('Most operators from https://chancejs.com are available. For information'
     + ' on the template format, check the documentation at'
-    + ' https://github.com/rueckstiess/mgenerate.js')
+    + ' https://github.com/rueckstiess/mgeneratejs')
   .version()
   .strict()
   .wrap(100);
