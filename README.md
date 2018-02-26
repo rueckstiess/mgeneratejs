@@ -143,6 +143,7 @@ mgeneratejs '{"ip_addresses": {"$array": {"of": "$ip", "number": {"$integer": {"
 - [`$numberDecimal`](#numberdecimal): Returns a MongoDB Decimal128 number.
 - [`$numberLong`](#numberlong): Returns a MongoDB Long (Int64) number.
 - [`$objectid`](#objectid): Returns MongoDB ObjectID.
+- [`$uuid`](#uuid): Returns BSON UUID.
 - [`$regex`](#regex): Returns a Regular Expression object.
 - [`$timestamp`](#timestamp): Returns a MongoDB Timestamp.
 
@@ -452,6 +453,19 @@ _Aliases_
 > ```
 >
 > Returns `{"_id":{"$oid":"574ac75f725f4447309ab587"}}`.
+
+
+### `$uuid`
+
+Returns a new MongoDB Binary UUID.
+
+> **Example**
+>
+> ```
+> {"entry_id": "$uuid"}
+> ```
+>
+> Returns `{"entry_id": UUID("dee11d4e-63c6-4d90-983c-5c9f1e79e96c")}`.
 
 
 ### `$pick`
