@@ -476,14 +476,14 @@ _Options_
 
 ### `$pickset`
 
-Takes an array and a number `element` and returns a new n-element array
+Takes an array and a number `quantity` and returns a new n-element array
 containing unique values from the input array. If the number is larger than the
 length of the array, return `$missing` instead, which will remove the key from
 the resulting document.
 
 _Options_
 - `array` (required) Array of values or operators to choose from.
-- `element` (optional) The size of the output array. Default `1`.
+- `quantity` (optional) The size of the output array. Default `1`.
 
 
 ### `$point`
