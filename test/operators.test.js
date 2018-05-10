@@ -354,7 +354,7 @@ context('Operators', function() {
     it('should support fixed parameter', function() {
       var res = mgenerate({foo: {$numberDecimal: {fixed: 5}}});
       var valStr = _.values(res.foo.toJSON())[0];
-      assert.ok(valStr.match(/\.\d{5,5}/));
+      assert.ok(valStr.match(/\.\d{0,5}/));
     });
   });
 
