@@ -474,6 +474,18 @@ _Options_
 > Returns `{"color": "red"}`.
 
 
+### `$pickset`
+
+Takes an array and a number `quantity` and returns a new n-element array
+containing unique values from the input array. If the number is larger than the
+length of the array, return `$missing` instead, which will remove the key from
+the resulting document.
+
+_Options_
+- `array` (required) Array of values or operators to choose from.
+- `quantity` (optional) The size of the output array. Default `1`.
+
+
 ### `$point`
 
 Like `$coordinates`, but returns a GeoJSON formatted

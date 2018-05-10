@@ -96,6 +96,32 @@ context('Operators', function() {
     });
   });
 
+  describe('$pickset', function() {
+    it('should pick the correct number of element', function() {
+      var res = mgenerate({color: {$pickset: {array: ['green', 'red', 'blue'], quantity: 2}}});
+      assert.equal(res.color.length, 2);
+    });
+    it('should not pick the same item twice', function() {
+      var res = mgenerate({color: {$pickset: {array: ['green', 'red', 'blue'], quantity: 3}}});
+      var expset = ['green', 'red', 'blue'].sort();
+      assert.deepEqual(res.color.sort(), expset);
+    });
+    it('should pick one element if `quantity` is not specified', function() {
+      var res = mgenerate({color: {$pickset: {array: ['green', 'red', 'blue']}}});
+      assert.equal(res.color.length, 1);
+    });
+    it('should return $missing if quantity is out of array bounds', function() {
+      var res = mgenerate({color: {$pickset: {array: ['green', 'red', 'blue'], quantity: 4}}});
+      assert.ok(!_.has(res, 'color'));
+      res = mgenerate({color: {$pickset: {array: ['green', 'red', 'blue'], quantity: -1}}});
+      assert.ok(!_.has(res, 'color'));
+    });
+    it('should return $missing if `array` is not an array', function() {
+      var res = mgenerate({color: {$pickset: {array: 'red', quantity: 3}}});
+      assert.ok(!_.has(res, 'color'));
+    });
+  });
+
 
   describe('$array', function() {
     it('should create a fixed-length array', function() {
