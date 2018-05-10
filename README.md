@@ -124,6 +124,7 @@ mgeneratejs '{"ip_addresses": {"$array": {"of": "$ip", "number": {"$integer": {"
 - [`$inc`](#inc): Generates natural numbers in increasing order.
 - [`$join`](#join): Joins elements of an array to a string.
 - [`$pick`](#pick): Returns an element from an array.
+- [`$pickset`](#pickset): Returns a subset of an array.
 
 #### Geospatial
 
@@ -484,6 +485,14 @@ the resulting document.
 _Options_
 - `array` (required) Array of values or operators to choose from.
 - `quantity` (optional) The size of the output array. Default `1`.
+
+> **Example**
+>
+> ```
+> {"color": {"$pickset": {"array": ["green", "red", "blue"], "quantity": 2}}}
+> ```
+>
+> Returns `{"color": ["red", "green"]}`
 
 
 ### `$point`
