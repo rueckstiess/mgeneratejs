@@ -17,12 +17,12 @@
     "url": "git://github.com/rueckstiess/mgeneratejs.git"
   },
   "dependencies": {
-    "bson": "^0.5.5",
+    "bson": "^1.0.5",
     "chance": "^1.0.8",
-    "event-stream": "^3.3.2",
+    "event-stream": "^4.0.1",
     "faker": "^3.1.0",
     "lodash": "^4.17.4",
-    "mongodb-extended-json": "^1.6.3",
+    "mongodb-extended-json": "^1.10.1",
     "yargs": "^6.3.0"
   },
   "devDependencies": {
