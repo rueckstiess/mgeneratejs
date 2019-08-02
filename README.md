@@ -14,7 +14,9 @@ npm install -g mgeneratejs
 ```
 mgeneratejs '{"name": "$name", "age": "$age", "emails": {"$array": {"of": "$email", "number": 3}}}' -n 5
 ```
+
 Results in:
+
 ```
 {"name":"Glenn Simmons","age":32,"emails":["ivuge@afovopid.tt","gied@orsin.zw","wuhowbi@con.uk"]}
 {"name":"Jane Santiago","age":57,"emails":["oliclon@ohaoni.la","hetoufi@em.ug","ecwawce@sewwato.kn"]}
@@ -24,10 +26,10 @@ Results in:
 ```
 
 You can also specify a JSON file instead of a JSON string:
+
 ```
 mgeneratejs template.json -n 5
 ```
-
 
 ## Template Syntax
 
@@ -43,7 +45,6 @@ The input string or file must be valid JSON, with one exception: As a convenienc
 The output has the same shape as the input template (including nested keys), with
 one exception: If a key is assigned the special value `$missing`, then the
 key is not present in the output (see `$missing` below for an example).
-
 
 ### Values
 
@@ -72,6 +73,7 @@ Example: `$year`
 ```
 mgeneratejs '{"born_in": "$year"}' -n 5
 ```
+
 ```
 {"born_in":"2035"}
 {"born_in":"2086"}
@@ -86,6 +88,7 @@ here, a minimum and maximum for the value:
 ```
 mgeneratejs '{"born_in": {"$year": {"min": 1930, "max": 1970}}}'
 ```
+
 ```
 {"born_in":"1936"}
 {"born_in":"1953"}
@@ -107,6 +110,7 @@ of the `$array` operator to generate variable-length arrays.
 ```
 mgeneratejs '{"ip_addresses": {"$array": {"of": "$ip", "number": {"$integer": {"min": 0, "max": 5}}}}}'
 ```
+
 ```
 {"ip_addresses":["166.182.72.83","127.94.56.191","236.79.131.157","94.66.121.242"]}
 {"ip_addresses":["48.227.145.186","160.173.45.84","24.86.124.235"]}
@@ -147,7 +151,6 @@ mgeneratejs '{"ip_addresses": {"$array": {"of": "$ip", "number": {"$integer": {"
 - [`$regex`](#regex): Returns a Regular Expression object.
 - [`$timestamp`](#timestamp): Returns a MongoDB Timestamp.
 
-
 ### All Built-in Operators in Alphabetical Order
 
 ### `$array`
@@ -155,6 +158,7 @@ mgeneratejs '{"ip_addresses": {"$array": {"of": "$ip", "number": {"$integer": {"
 Creates an array of values. Each new element is evaluated separately.
 
 _Options_
+
 - `of` (required) Defines an element of the array. Operators are evaluated separately for each element.
 - `number` (optional) Number of elements. Default `0`.
 
@@ -166,12 +170,12 @@ _Options_
 >
 > Creates an array of 3 countries, e.g. `{"countries":["Czech Republic","Ireland","Argentina"]}`
 
-
 ### `$binary`
 
 Returns a random MongoDB Binary value, optionally with a `length` and `subtype`.
 
 _Options_
+
 - `length` (optional) Length in bytes of binary value. Default `10`.
 - `subtype` (optional) Specific binary subtype (see [BSON spec][bson-spec]). Default `0`.
 
@@ -184,13 +188,13 @@ _Options_
 > Returns a Binary object (stringified to extended JSON on stdout).
 > e.g. `{"blob":{"$binary":"TzhXcFZoRllRNg==","$type":"0"}}`.
 
-
 ### `$choose`
 
 Chooses one element from an array of possible choices with uniform probability.
 Optionally chooses with probability proportional to a provided `weights` array.
 
 _Options_
+
 - `from` (required) Array of values or operators to choose from.
 - `weights` (optional) Number of elements. Default `0`.
 
@@ -203,17 +207,18 @@ _Options_
 > Returns `{"status": "read"}` with probability 1/2, and `{"status": "unread"}` and
 > `{"status": "deleted"}` each with probability 1/4.
 
-
 ### `$coordinates`
 
 Returns a 2-element array of longitude/latitude coordinates, optionally within
 `long_lim` and/or `lat_lim` bounds.
 
 _Aliases_
+
 - `$coord`
 - `$coordinate`
 
 _Options_
+
 - `long_lim` (optional) Array of longitude bounds. Default `[-180, 180]`.
 - `lat_lim` (optional) Array of latitude bounds. Default `[-90, 90]`.
 
@@ -226,7 +231,6 @@ _Options_
 > Returns a pair of coordinates with the longitude bounds between -20 and -19,
 > e.g. `{"position":[-19.96851,-47.46141]}`.
 
-
 ### `$date`
 
 Returns a random date object, optionally between specified `min` and `max` values.
@@ -234,9 +238,11 @@ If `min` and/or `max` are provided, they need to be in a format that [Date.parse
 can read, e.g. ISO-8601.
 
 _Aliases_
+
 - `$datetime`
 
 _Options_
+
 - `min` (optional) Minimum date, as parseable string.
 - `max` (optional) Maximum date, as parsable string.
 
@@ -248,7 +254,6 @@ _Options_
 >
 > Returns a random date and time between 2015 and 2016 (incl.), e.g.
 > `{"last_login":{"$date":"2016-06-28T15:28:54.721Z"}}`.
-
 
 ### `$now`
 
@@ -277,10 +282,11 @@ Additional options are passed onto each geometry, e.g. `corners` is passed
 to polygons, `locs` is passed to line strings.
 
 _Options_
+
 - `number` (optional) Number of geometries in the collection. Default `3`.
 - `types` (optional) Types of geometries to choose from. Default `["Point", "LineString", "Polygon"]`.
 - `locs` (optional) Number of locations in a line string. Default `2`.
-- `corners` (optional) Number of corners in a polygon. Default `3`.  The last point in the `coordinates` array closes the polygon and does not count towards the number of corners.
+- `corners` (optional) Number of corners in a polygon. Default `3`. The last point in the `coordinates` array closes the polygon and does not count towards the number of corners.
 - `long_lim` (optional) Array of longitude bounds. Default `[-180, 180]`.
 - `lat_lim` (optional) Array of latitude bounds. Default `[-90, 90]`.
 
@@ -291,6 +297,7 @@ _Options_
 > ```
 >
 > Returns a GeoJSON GeometryCollection with 4 triangles.
+>
 > ```
 > {
 >   "triangles": {
@@ -317,12 +324,12 @@ _Options_
 > }
 > ```
 
-
 ### `$inc`
 
 Generate natural numbers in increasing order.
 
 _Options_
+
 - `start` (optional) starts counting at this value. Default `0`.
 - `step` (optional) increases by this amount each time. Default `1`. Can also take negative value.
 
@@ -334,7 +341,6 @@ _Options_
 >
 > Assigns the numbers 0, 2, 4, 6, ... to subsequent objects.
 
-
 ### `$join`
 
 Takes an array `array` and a separator string `sep` and joins the elements
@@ -342,6 +348,7 @@ of the array (each cast to string) separated by `sep`. The default separator
 is the empty string ''.
 
 _Options_
+
 - `array` (required) Array of values to be joined (cast to string).
 - `sep` (optional) Separator string. Default `''` (empty string).
 
@@ -353,13 +360,13 @@ _Options_
 >
 > Returns `{"code": "foo-bar-baz"}`.
 
-
 ### `$linestring`
 
 Returns a GeoJSON formatted [LineString](http://geojson.org/geojson-spec.html#id3)
 with optionally `locs` locations and within `long_lim` and/or `lat_lim` bounds.
 
 _Options_
+
 - `locs` (optional) Number of locations in the line string. Default `2`.
 - `long_lim` (optional) Array of longitude bounds. Default `[-180, 180]`.
 - `lat_lim` (optional) Array of latitude bounds. Default `[-90, 90]`.
@@ -373,11 +380,9 @@ _Options_
 > Returns a GeoJSON line string with 2 locations,
 > e.g. `{"line":{"type":"LineString","coordinates":[[35.67106,-41.9745],[120.07739,68.46491]]}}`.
 
-
 ### `$maxkey`
 
 Returns the MongoDB MaxKey value.
-
 
 > **Example**
 >
@@ -387,11 +392,9 @@ Returns the MongoDB MaxKey value.
 >
 > Returns `{"upper_bound":{"$maxKey":1}}`.
 
-
 ### `$minkey`
 
 Returns the MongoDB MinKey value.
-
 
 > **Example**
 >
@@ -401,12 +404,12 @@ Returns the MongoDB MinKey value.
 >
 > Returns `{"lower_bound":{"$minKey":1}}`.
 
-
 ### `$numberDecimal`
 
 Returns a MongoDB Decimal128 number.
 
 _Options_
+
 - `min` (optional) minimum value. Default `0`.
 - `max` (optional) maximum value. Default `1000`.
 - `fixed` (optional) number of digits after the decimal. Default `2`.
@@ -419,12 +422,12 @@ _Options_
 >
 > Returns `{"price":{"$numberDecimal": "1545.241"}}`.
 
-
 ### `$numberLong`
 
 Returns a MongoDB Long (Int64) number.
 
 _Options_
+
 - `min` (optional) minimum value. Default `-2^53`.
 - `max` (optional) maximum value. Default `2^53`.
 
@@ -436,7 +439,6 @@ _Options_
 >
 > Returns `{"price":{"$numberLong":"7624790980443125"}}`.
 
-
 ### `$objectid`
 
 Returns a new MongoDB ObjectId.
@@ -444,7 +446,6 @@ Returns a new MongoDB ObjectId.
 _Aliases_
 
 - `$oid`
-
 
 > **Example**
 >
@@ -454,7 +455,6 @@ _Aliases_
 >
 > Returns `{"_id":{"$oid":"574ac75f725f4447309ab587"}}`.
 
-
 ### `$pick`
 
 Takes an array and a number `element` and returns the `element`-th value of
@@ -463,6 +463,7 @@ the array. If the number is larger than the length of the array, return
 `element` is zero-based (`0` returns the first element).
 
 _Options_
+
 - `array` (required) Array of values or operators to choose from.
 - `element` (optional) Index of the array element to pick. Default `0`.
 
@@ -474,7 +475,6 @@ _Options_
 >
 > Returns `{"color": "red"}`.
 
-
 ### `$pickset`
 
 Takes an array and a number `quantity` and returns a new n-element array
@@ -483,6 +483,7 @@ length of the array, return `$missing` instead, which will remove the key from
 the resulting document.
 
 _Options_
+
 - `array` (required) Array of values or operators to choose from.
 - `quantity` (optional) The size of the output array. Default `1`.
 
@@ -494,7 +495,6 @@ _Options_
 >
 > Returns `{"color": ["red", "green"]}`
 
-
 ### `$point`
 
 Like `$coordinates`, but returns a GeoJSON formatted
@@ -502,6 +502,7 @@ Like `$coordinates`, but returns a GeoJSON formatted
 `long_lim` and/or `lat_lim` bounds.
 
 _Options_
+
 - `long_lim` (optional) Array of longitude bounds. Default `[-180, 180]`.
 - `lat_lim` (optional) Array of latitude bounds. Default `[-90, 90]`.
 
@@ -518,7 +519,6 @@ linestring: require('./linestring'),
 polygon: require('./polygon'),
 geometries: require('./geometries'),
 
-
 ### `$polygon`
 
 Returns a GeoJSON formatted [Polygon](http://geojson.org/geojson-spec.html#id4)
@@ -527,6 +527,7 @@ Returns a GeoJSON formatted [Polygon](http://geojson.org/geojson-spec.html#id4)
 and does not count towards the number of corners.
 
 _Options_
+
 - `corners` (optional) Number of corners in the polygon. Default `3`.
 - `long_lim` (optional) Array of longitude bounds. Default `[-180, 180]`.
 - `lat_lim` (optional) Array of latitude bounds. Default `[-90, 90]`.
@@ -539,7 +540,6 @@ _Options_
 >
 > Returns a GeoJSON polygon with 5 corners,
 > e.g. `{"area":{"type":"Polygon","coordinates":[[[-75.26507,81.14973],[-12.29368,64.22995],[60.43231,-15.97496],[-133.6566,-40.40259],[-130.31348,-87.36982],[-75.26507,81.14973]]]}}`.
-
 
 ### `$regex`
 
@@ -558,8 +558,6 @@ _Options_
 >
 > Returns `{"expr":{"$regex":"^ab+c$","$options":"i"}}`.
 
-
-
 ### `$timestamp`
 
 Returns a MongoDB Timestamp object.
@@ -568,7 +566,6 @@ _Options_
 
 - `t` (optional) Set the low value to the specified value. Default random.
 - `i` (optional) Set the high value to the specified value. Default random.
-
 
 > **Example**
 >
@@ -604,6 +601,7 @@ values, e.g.
 ```
 mgeneratejs '{"recipient": "{{chance.name()}} <{{chance.email()}}>"}' -n 3
 ```
+
 ```
 {"recipient":"Lora Jimenez <muwer@oma.qa>"}
 {"recipient":"Elnora Brewer <wisnowaz@vacpar.tg>"}
@@ -614,13 +612,13 @@ mgeneratejs '{"recipient": "{{chance.name()}} <{{chance.email()}}>"}' -n 3
 
 This is a JavaScript port from the [`mgenerate`][mgenerate-mtools] script in the
 [mtools][mtools] library (of which I am also the author). It is mostly backwards
-compatible except for the following breaking changes:  
+compatible except for the following breaking changes:
 
 1. The "array" operator format is no longer supported, as it was confusing
    which arguments need to be provided in which order. Instead, use the "object"
    format with named options. See [array shortcut syntax][array-syntax].
 2. The "$concat" operator has been renamed to "$join", as this operation is
-   called "join" in many languages, e.g. Python and JavaScript. "$concat" is
+   called "join" in many languages, e.g. Python and JavaScript. "\$concat" is
    reserved for a future operator to concatenate arrays.
 3. `mgeneratejs` does not insert documents directly into MongoDB, it only outputs
    to stdout. It doesn't make sense to re-implement all the authentication options
