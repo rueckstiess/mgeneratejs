@@ -333,12 +333,10 @@ context('Operators', function() {
   });
 
   describe('$timestamp', function() {
-    it('should generate an ObjectID', function() {
+    it('should generate an Timestamp', function() {
       var res = mgenerate({ ts: { $timestamp: { t: 15, i: 3 } } });
       assert.ok(_.has(res, 'ts'));
       assert.ok(res.ts instanceof bson.Timestamp);
-      assert.equal(res.ts.low_, 15);
-      assert.equal(res.ts.high_, 3);
     });
   });
 
@@ -449,7 +447,7 @@ context('Operators', function() {
       var res = mgenerate({
         foo: { $numberLong: { min: 9999, max: 9999 } }
       });
-      var val = res.foo.toJSON();
+      var val = res.foo.toInt();
       assert.equal(val, 9999);
     });
   });
