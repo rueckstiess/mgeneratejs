@@ -31,12 +31,6 @@
     "pre-commit": "^1.1.2",
     "prettier": "1.18.2"
   },
-  "prettier": {
-    "trailingComma": "none",
-    "tabWidth": 2,
-    "semi": true,
-    "singleQuote": true
-  },
   "license": "Apache-2.0",
   "precommit": [
     "check"
