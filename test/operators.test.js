@@ -324,11 +324,11 @@ context('Operators', function() {
   describe('$regex', function() {
     it('should generate a regular expression', function() {
       var res = mgenerate({
-        rx: { $regex: { string: 'foo+bar.*\n$', flags: 'i' } }
+        rx: { $regex: { string: 'foo+bar.*$', flags: 'i' } }
       });
       assert.ok(_.has(res, 'rx'));
       assert.ok(res.rx instanceof RegExp);
-      assert.equal(res.rx.toString(), '/foo+bar.*\n$/i');
+      assert.equal(res.rx.toString(), '/foo+bar.*$/i');
     });
   });
 
@@ -391,6 +391,10 @@ context('Operators', function() {
     });
     it('should have a $number alias for $integer', function() {
       var res = mgenerate({ foo: { $number: { min: -10, max: 10 } } });
+      assert.ok(_.isNumber(res.foo));
+    });
+    it('should have a $numberInt alias for $integer', function() {
+      var res = mgenerate({ foo: { $numberInt: { min: -10, max: 10 } } });
       assert.ok(_.isNumber(res.foo));
     });
   });

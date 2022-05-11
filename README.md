@@ -147,6 +147,7 @@ mgeneratejs '{"ip_addresses": {"$array": {"of": "$ip", "number": {"$integer": {"
 - [`$minkey`](#minkey): Returns a MongoDB MinKey object.
 - [`$numberDecimal`](#numberdecimal): Returns a MongoDB Decimal128 number.
 - [`$numberLong`](#numberlong): Returns a MongoDB Long (Int64) number.
+- [`$numberInt`](#numberint): Returns a Int32 number.
 - [`$objectid`](#objectid): Returns MongoDB ObjectID.
 - [`$regex`](#regex): Returns a Regular Expression object.
 - [`$timestamp`](#timestamp): Returns a MongoDB Timestamp.
@@ -408,6 +409,10 @@ Returns the MongoDB MinKey value.
 
 Returns a MongoDB Decimal128 number.
 
+_Aliases_
+
+- `$decimal`
+
 _Options_
 
 - `min` (optional) minimum value. Default `0`.
@@ -426,10 +431,36 @@ _Options_
 
 Returns a MongoDB Long (Int64) number.
 
+_Aliases_
+
+- `$long`
+
 _Options_
 
 - `min` (optional) minimum value. Default `-2^53`.
 - `max` (optional) maximum value. Default `2^53`.
+
+> **Example**
+>
+> ```
+> {"price": {"$numberLong": {"min": 100000}}}
+> ```
+>
+> Returns `{"price":{"$numberLong":"7624790980443125"}}`.
+
+### `$numberInt`
+
+Returns ag 32-bit integer number.
+
+_Aliases_
+
+- `$number`
+- `$integer`
+
+_Options_
+
+- `min` (optional) minimum value. Default `-2^31`.
+- `max` (optional) maximum value. Default `2^31`.
 
 > **Example**
 >
