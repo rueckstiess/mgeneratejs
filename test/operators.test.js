@@ -316,13 +316,13 @@ context('Operators', function() {
       const objectIdBytes = '648750fb87f87cb95eeccfcf';
       var res = mgenerate({ _id: { $objectid: { value: objectIdBytes } } });
       assert.ok(_.has(res, '_id'));
-      assert.equal(res._id, bson.ObjectId(objectIdBytes));
+      assert.ok(res._id.equals(bson.ObjectId(objectIdBytes)));
     });
     it('should generate new ObjectID if value not supplied', function() {
       const objectIdBytes = '648750fb87f87cb95eeccfcf';
       var res = mgenerate({ _id: '$objectid' });
       assert.ok(_.has(res, '_id'));
-      assert.notEqual(res._id, bson.ObjectId(objectIdBytes));
+      assert.ok(!res._id.equals(bson.ObjectId(objectIdBytes)));
     });
   });
 
