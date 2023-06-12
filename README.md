@@ -474,6 +474,12 @@ _Options_
 
 Returns a new MongoDB ObjectId.
 
+If a verbatim, constant ObjectId is needed (i.e.: _not_ randomly generated), use the `value` option.
+
+_Options_
+
+- `value` (optional) Constant object id value string.
+
 _Aliases_
 
 - `$oid`
@@ -485,6 +491,12 @@ _Aliases_
 > ```
 >
 > Returns `{"_id":{"$oid":"574ac75f725f4447309ab587"}}`.
+>
+> ```
+> {"_id": {"$objectid": {"value": "000000000000000000abcdef") }}}
+> ```
+>
+> Returns `{"_id":{"$oid":"000000000000000000abcdef"}}`.
 
 ### `$pick`
 
