@@ -83,11 +83,12 @@ var stringifyStream = argv.jsonArray
   : eJSONStringifyStream('', '\n', '\n');
 
 function generate() {
+  var globalState = {};
   es.readable(function(count, callback) {
     if (count >= argv.number) {
       return this.emit('end');
     }
-    this.emit('data', mgenerate(template));
+    this.emit('data', mgenerate(template, globalState));
     callback();
   })
     .pipe(stringifyStream)
