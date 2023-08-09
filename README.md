@@ -127,6 +127,7 @@ mgeneratejs '{"ip_addresses": {"$array": {"of": "$ip", "number": {"$integer": {"
 - [`$choose`](#choose): Chooses one element from an array of possible choices.
 - [`$inc`](#inc): Generates natural numbers in increasing order.
 - [`$join`](#join): Joins elements of an array to a string.
+- [`$maxcard`](#maxcard): Limits the cardinality of a random value.
 - [`$pick`](#pick): Returns an element from an array.
 - [`$pickset`](#pickset): Returns a subset of an array.
 
@@ -256,22 +257,6 @@ _Options_
 > Returns a random date and time between 2015 and 2016 (incl.), e.g.
 > `{"last_login":{"$date":"2016-06-28T15:28:54.721Z"}}`.
 
-### `$now`
-
-Returns the current date at creation time. Ideal for time-stamping documents.
-
-_Options_
-_none_
-
-> **Example**
->
-> ```
-> {"created": "$now"}
-> ```
->
-> Returns the extended JSON date and time at creation.
-> `{"created":{"$date":"2017-02-20T04:44:24.880Z"}}`.
-
 ### `$geometries`
 
 Returns a GeoJSON formatted [GeometryCollection](http://geojson.org/geojson-spec.html#geometrycollection)
@@ -381,6 +366,24 @@ _Options_
 > Returns a GeoJSON line string with 2 locations,
 > e.g. `{"line":{"type":"LineString","coordinates":[[35.67106,-41.9745],[120.07739,68.46491]]}}`.
 
+### `$maxcard`
+
+Limits the number of different values of a random generator to the specified maximum.
+
+_Options_
+
+- `value` The expression from which to draw the samples.
+- `max` The upper limit of different values.
+
+> **Example**
+>
+> ```
+> mgeneratejs '{"top_5_animals": {"$maxcard": {"value": "$animal", "max": 5}}}' -n 100
+> ```
+>
+> Even though we are generating 100 documents, there will be at most 5 different animals
+> in the data.
+
 ### `$maxkey`
 
 Returns the MongoDB MaxKey value.
@@ -404,6 +407,22 @@ Returns the MongoDB MinKey value.
 > ```
 >
 > Returns `{"lower_bound":{"$minKey":1}}`.
+
+### `$now`
+
+Returns the current date at creation time. Ideal for time-stamping documents.
+
+_Options_
+_none_
+
+> **Example**
+>
+> ```
+> {"created": "$now"}
+> ```
+>
+> Returns the extended JSON date and time at creation.
+> `{"created":{"$date":"2017-02-20T04:44:24.880Z"}}`.
 
 ### `$numberDecimal`
 
