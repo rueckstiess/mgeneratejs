@@ -1,7 +1,7 @@
 {
   "name": "mgeneratejs",
   "description": "Generate rich random data based on a JSON template file.",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "scripts": {
     "fmt": "prettier --write '**/*.{js,md}'",
     "check": "prettier --check '**/*.{js,md}'",
