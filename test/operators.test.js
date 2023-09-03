@@ -237,6 +237,39 @@ context('Operators', function() {
     });
   });
 
+  describe('$maxcard', function() {
+    it('should cap the cardinality of random values', function() {
+      // need to pass the same globalState to all mgenerate calls
+      var globalState = {};
+      var res = Array.from({ length: 100 }, () =>
+        mgenerate(
+          {
+            animal: { $maxcard: { value: '$animal', max: 3 } }
+          },
+          globalState
+        )
+      );
+      var valueSet = new Set(_.map(res, doc => doc.animal));
+      assert.equal(valueSet.size, 3);
+    });
+
+    it('should be a no-op if max is smaller than the generated cardinality', function() {
+      // need to pass the same globalState to all mgenerate calls
+      var globalState = {};
+      var res = Array.from({ length: 100 }, () =>
+        mgenerate({
+          value: {
+            $maxcard: { value: { $choose: { from: [1, 2, 3] } }, max: 5 }
+          },
+          globalState
+        })
+      );
+      console.log(res);
+      var valueSet = new Set(_.map(res, doc => doc.value));
+      assert.equal(valueSet.size, 3);
+    });
+  });
+
   describe('$coordinates', function() {
     it('should work with default bounds', function() {
       var res = mgenerate({ loc: '$coordinates' });
