@@ -87,8 +87,11 @@ function generate() {
     if (count >= argv.number) {
       return this.emit('end');
     }
-    this.emit('data', mgenerate(template));
-    callback();
+    let _self = this;
+    mgenerate(template).then(function(doc) {
+      _self.emit('data', doc);
+      callback();
+    });
   })
     .pipe(stringifyStream)
     .pipe(process.stdout);
